@@ -25,10 +25,10 @@ dir_includes := includes
 dir_txt := text
 dir_deps := deps
 # Directory lists:
-dir_light_clean := $(dir_exec) $(dir_objects) $(dir_txt) $(dir_deps)
-dir_full_clean := $(dir_light_clean) $(dir_helpers)
-dir_non_removable := $(dir_sources) $(dir_includes)
-dir_all := $(dir_full_clean) $(dir_non_removable)
+dir_clean := $(dir_exec) $(dir_objects) $(dir_txt) $(dir_deps)
+dir_remove := $(dir_clean) $(dir_helpers)
+dir_keep := $(dir_sources) $(dir_includes)
+dir_all := $(dir_remove) $(dir_keep)
 
 # Set vpaths:
 vpath %.cc $(dir_sources)
@@ -83,17 +83,17 @@ exA1.txt: $(dir_exec)/hello
 	       $(dir_txt)/$@
 
 %.o : %.cc
-	@g++ $< -c $(CPPFLAGS) -o $(dir_objects)/$@
+	@g++ $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
 
 $(dir_exec)/%: %.o | setup
 	@g++ $(foreach object,$^,$(dir_objects)/$(object)) -o $@
 
 clean:
-	$(call remove_dirs,$(dir_light_clean))
+	$(call remove_dirs,$(dir_clean))
 	@rm -rf ._*
 
 remove:
-	$(call remove_dirs,$(dir_full_clean))
+	$(call remove_dirs,$(dir_remove))
 
 setup: $(helper_paths) $(dir_all)
 
