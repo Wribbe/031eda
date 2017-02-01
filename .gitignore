@@ -1,2 +1,7 @@
 # Ignore g++ buffer files?
 ._*
+# Ignore folders.
+executables
+helper_scripts
+objects
+text
