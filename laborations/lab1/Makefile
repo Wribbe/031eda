@@ -43,6 +43,12 @@ helper_paths := $(foreach name,$(helpers),$(dir_helpers)/$(name))
 # Add helpers to path.
 export PATH := $(shell pwd)/$(dir_helpers):$(PATH)
 
+# Compiler options:
+# -----------------
+CPPFLAGS += -g -std=c++11 -Wall -Wextra -pedantic-errors -Wold-style-cast
+DEPFLAGS = -MT $@ -MMD -MP -MF $(dir_deps)/$*.d
+CXXFLAGS += $(DEPFLAGS)
+
 # Utilities.
 # ----------
 
