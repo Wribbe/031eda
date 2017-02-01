@@ -55,6 +55,7 @@ export PATH := $(shell pwd)/$(dir_helpers):$(PATH)
 CPPFLAGS += -g -std=c++11 -Wall -Wextra -pedantic-errors -Wold-style-cast
 DEPFLAGS = -MT $@ -MMD -MP -MF $(dir_deps)/$*.d
 CXXFLAGS += $(DEPFLAGS)
+CXX = g++
 
 # Utilities.
 # ----------
@@ -96,10 +97,10 @@ exA1.txt: $(dir_exec)/hello
 	       $(dir_txt)/$@
 
 %.o : %.cc
-	@g++ $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
+	@$(CXX) $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
 
 $(dir_exec)/%: %.o | setup
-	@g++ $(foreach object,$^,$(dir_objects)/$(object)) -o $@
+	@$(CXX) $(foreach object,$^,$(dir_objects)/$(object)) -o $@
 
 clean:
 	$(call remove_dirs,$(dir_clean))
