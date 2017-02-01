@@ -1,6 +1,10 @@
 # Makefile for C++ laboratory session 01.
 # ---------------------------------------
 
+# Make flags:
+# -----------
+MAKEFLAGS=--warn-undefined-variables
+
 # Variables.
 # ----------
 
