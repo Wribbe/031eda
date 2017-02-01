@@ -61,6 +61,7 @@ all: | setup
 
 clean:
 	$(call remove_dirs,$(dir_light_clean))
+	@rm -rf ._*
 
 remove:
 	$(call remove_dirs,$(dir_full_clean))
