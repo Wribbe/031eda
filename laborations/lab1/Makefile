@@ -18,11 +18,17 @@ dir_helpers := helper_scripts
 dir_objects := objects
 dir_sources := sources
 dir_includes := includes
+dir_txt := text
 # Directory lists:
-dir_light_clean := $(dir_exec) $(dir_objects)
+dir_light_clean := $(dir_exec) $(dir_objects) $(dir_txt)
 dir_full_clean := $(dir_light_clean) $(dir_helpers)
 dir_non_removable := $(dir_sources) $(dir_includes)
 dir_all := $(dir_full_clean) $(dir_non_removable)
+
+# Set vpaths:
+vpath %.cc $(dir_sources)
+vpath %.o $(dir_objects)
+vpath %.txt $(dir_txt)
 
 # Output scripts.
 echo_info := echo_info
@@ -57,7 +63,18 @@ remove_dirs = \
 # Recipes.
 # --------
 
-all: | setup
+all: exA1.txt
+
+exA1.txt: $(dir_exec)/hello
+	@echo_info "Creating: $@."
+	@echo "Simple Hello World program compiled do $(dir_exec)/hello." >\
+	       $(dir_txt)/$@
+
+%.o : %.cc
+	@g++ $< -c $(CPPFLAGS) -o $(dir_objects)/$@
+
+$(dir_exec)/%: %.o | setup
+	@g++ $(foreach object,$^,$(dir_objects)/$(object)) -o $@
 
 clean:
 	$(call remove_dirs,$(dir_light_clean))
