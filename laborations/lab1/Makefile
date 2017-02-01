@@ -34,6 +34,13 @@ dir_all := $(dir_remove) $(dir_keep)
 vpath %.cc $(dir_sources)
 vpath %.o $(dir_objects)
 vpath %.txt $(dir_txt)
+vpath %.d $(dir_deps)
+
+# File_lists:
+CC_sources = $(foreach path,\
+			 	$(wildcard $(dir_sources)/*.cc),\
+				$(patsubst $(dir_sources)/%,%,$(path))\
+			  )
 
 # Output scripts.
 echo_info := echo_info
@@ -134,3 +141,8 @@ $(helper_paths):
 # --------------
 
 .PHONY: all setup remove clean
+
+# Include *d-files.
+# -----------------
+D_FILES := $(foreach source,$(CC_sources),$(dir_deps)/$(source:.cc=.d))
+-include D_FILES
