@@ -19,8 +19,9 @@ dir_objects := objects
 dir_sources := sources
 dir_includes := includes
 dir_txt := text
+dir_deps := deps
 # Directory lists:
-dir_light_clean := $(dir_exec) $(dir_objects) $(dir_txt)
+dir_light_clean := $(dir_exec) $(dir_objects) $(dir_txt) $(dir_deps)
 dir_full_clean := $(dir_light_clean) $(dir_helpers)
 dir_non_removable := $(dir_sources) $(dir_includes)
 dir_all := $(dir_full_clean) $(dir_non_removable)
