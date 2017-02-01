@@ -65,6 +65,13 @@ remove_dirs = \
 
 all: exA1.txt
 
+run: all
+	@echo_info "exA1.txt info:"
+	@cat $(dir_txt)/exA1.txt
+	@echo_info "Executing exA1."
+	@$(dir_exec)/hello
+	@echo_info "Executing exA1 done."
+
 exA1.txt: $(dir_exec)/hello
 	@echo_info "Creating: $@."
 	@echo "Simple Hello World program compiled do $(dir_exec)/hello." >\
