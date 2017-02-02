@@ -15,6 +15,7 @@ False:=False
 # Output control:
 export OUT_INFO:=$(True)
 export OUT_WARNING:=$(True)
+OUT_COMPILATION:=$(False)
 
 # Directories:
 dir_exec := executables
@@ -96,11 +97,20 @@ exA1.txt: $(dir_exec)/hello
 	@echo "Simple Hello World program compiled do $(dir_exec)/hello." >\
 	       $(dir_txt)/$@
 
+# Compilation and linking operations.
+o_from_cc = $(CXX) $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
+exec_from_o = $(CXX) $(foreach object,$^,$(dir_objects)/$(object)) -o $@
+# Prepend @ sign if OUT_COMPILATION == False.
+ifeq ($(OUT_COMPILATION), $(False))
+$(eval o_from_cc = @$(value o_from_cc))
+$(eval exec_from_o = @$(value exec_from_o))
+endif
+
 %.o : %.cc
-	@$(CXX) $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
+	$(o_from_cc)
 
 $(dir_exec)/%: %.o | setup
-	@$(CXX) $(foreach object,$^,$(dir_objects)/$(object)) -o $@
+	$(exec_from_o)
 
 clean:
 	$(call remove_dirs,$(dir_clean))
