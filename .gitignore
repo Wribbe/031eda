@@ -6,4 +6,6 @@ helper_scripts
 objects
 text
 deps
+output
+# Ignore vim swapfiles.
 *.swp
