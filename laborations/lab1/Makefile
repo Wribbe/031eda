@@ -32,9 +32,9 @@ dir_remove := $(dir_clean) $(dir_helpers)
 dir_keep := $(dir_sources) $(dir_includes) $(dir_lib)
 dir_all := $(dir_remove) $(dir_keep)
 
-# Set vpaths:
-vpath %.cc $(dir_sources):$(dir_lib)
-vpath %.o $(dir_objects)
+# Set vpaths (vpath is for source only):
+vpath %.cc $(dir_sources)
+vpath %.cc $(dir_lib)
 vpath %.txt $(dir_txt)
 vpath %.d $(dir_deps)
 
