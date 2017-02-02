@@ -15,7 +15,8 @@ False:=False
 # Output control:
 export OUT_INFO:=$(True)
 export OUT_WARNING:=$(True)
-OUT_COMPILATION:=$(False)
+#OUT_COMPILATION:=$(False)
+OUT_COMPILATION:=$(True)
 
 # Directories:
 dir_exec := bin
@@ -63,7 +64,8 @@ CXX = g++
 
 # Compilation commands:
 o_from_cc = $(CXX) $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
-exec_from_o = $(CXX) $(foreach object,$^,$(dir_objects)/$(object)) -o $@
+exec_from_o = $(CXX) -o $@ $(foreach object,$^,$(dir_objects)/$(object))\
+			  $(CPPFLAGS)
 
 # Utilities.
 # ----------
@@ -103,13 +105,13 @@ run: all
 
 exA1.txt: $(dir_exec)/hello
 	@echo_info "Creating: $@."
-	@echo "Simple Hello World program compiled do $(dir_exec)/hello." >\
+	@echo "Simple Hello World program compiled to $(dir_exec)/hello." >\
 	       $(dir_txt)/$@
 
 exA4.txt: $(dir_exec)/ltest
 	@echo_info "Creating: $@."
-	@echo "Linked list implementation for int variables, reults in $(dir_exec)/ltest." >\
-	       $(dir_txt)/$@
+	@echo "Test of linked list implementation for int variables, reults in"\
+		  "$(dir_exec)/ltest." > $(dir_txt)/$@
 
 
 # Suppress compilation output if $(OUT_COMPILATION) == $(False).
@@ -118,13 +120,17 @@ $(eval o_from_cc = @$(value o_from_cc))
 $(eval exec_from_o = @$(value exec_from_o))
 endif
 
-# Compilation recipes:
+# General compilation recipes:
 
-%.o : %.cc
+%.o : %.cc | setup
 	$(o_from_cc)
 
-$(dir_exec)/%: %.o | setup
+$(dir_exec)/%: %.o
 	$(exec_from_o)
+
+# Specific executable dependencies:
+
+$(dir_exec)/ltest: $(dir_objects)/list.o
 
 # Utility recipes:
 
