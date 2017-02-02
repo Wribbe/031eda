@@ -15,6 +15,6 @@ int main(int argc, char * argv[])
 
   char c;
   while (file.get(c))
-    std::cout << c;
+    std::cout << Coding().encode(c);
   file.close();
 }
