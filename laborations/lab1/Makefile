@@ -15,7 +15,7 @@ False:=False
 # Output control:
 export OUT_INFO:=$(True)
 export OUT_WARNING:=$(True)
-OUT_COMPILATION:=$(True)
+OUT_COMPILATION:=$(False)
 
 # Directories:
 dir_exec := executables
@@ -88,7 +88,7 @@ remove_dirs = \
 
 # Exercise creation and running.
 
-all: exA1.txt
+all: exA1.txt exA4.txt
 
 run: all
 	@echo_info "exA1.txt info:"
@@ -101,6 +101,12 @@ exA1.txt: $(dir_exec)/hello
 	@echo_info "Creating: $@."
 	@echo "Simple Hello World program compiled do $(dir_exec)/hello." >\
 	       $(dir_txt)/$@
+
+exA4.txt: $(dir_exec)/ltest
+	@echo_info "Creating: $@."
+	@echo "Linked list implementation for int variables, reults in $(dir_exec)/ltest." >\
+	       $(dir_txt)/$@
+
 
 # Compilation, linking and folder operations.
 
