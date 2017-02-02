@@ -112,7 +112,7 @@ exA4.txt: $(dir_exec)/ltest
 	       $(dir_txt)/$@
 
 
-# Suppress compilation output if OUT_COMPILATION == $(True).
+# Suppress compilation output if $(OUT_COMPILATION) == $(False).
 ifeq ($(OUT_COMPILATION), $(False))
 $(eval o_from_cc = @$(value o_from_cc))
 $(eval exec_from_o = @$(value exec_from_o))
