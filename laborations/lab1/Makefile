@@ -25,14 +25,15 @@ dir_sources := sources
 dir_includes := includes
 dir_txt := text
 dir_deps := deps
+dir_lib := lib
 # Directory lists:
 dir_clean := $(dir_exec) $(dir_objects) $(dir_txt) $(dir_deps)
 dir_remove := $(dir_clean) $(dir_helpers)
-dir_keep := $(dir_sources) $(dir_includes)
+dir_keep := $(dir_sources) $(dir_includes) $(dir_lib)
 dir_all := $(dir_remove) $(dir_keep)
 
 # Set vpaths:
-vpath %.cc $(dir_sources)
+vpath %.cc $(dir_sources):$(dir_lib)
 vpath %.o $(dir_objects)
 vpath %.txt $(dir_txt)
 vpath %.d $(dir_deps)
