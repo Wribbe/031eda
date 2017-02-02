@@ -84,7 +84,7 @@ remove_dirs = \
 			if [ -f "$(dir_helpers)/$(echo_info)" ]; then \
 			    echo_info "Removing directory <$$dir>."; \
 			fi; \
-		    rm -rf $$dir; \
+			rm -rf $$dir; \
 		fi;\
 	done; \
 
