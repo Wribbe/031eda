@@ -1,5 +1,5 @@
 #include <iostream>
-#include "cipher.h"
+#include "coding.h"
 
 int main(void)
 {

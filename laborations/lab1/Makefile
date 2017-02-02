@@ -137,7 +137,9 @@ $(dir_exec)/% : $(dir_objects)/%.o | setup
 
 $(dir_exec)/ltest: $(dir_objects)/list.o
 
-$(dir_objects)/cipher.o : $(dir_exec)/decode $(dir_exec)/encode
+#$(dir_objects)/coding.o : $(dir_exec)/decode $(dir_exec)/encode
+$(dir_exec)/decode : $(dir_objects)/coding.o
+$(dir_exec)/encode : $(dir_objects)/coding.o
 
 # Utility recipes:
 

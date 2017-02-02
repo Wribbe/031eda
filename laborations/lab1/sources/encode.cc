@@ -1,7 +1,20 @@
 #include <iostream>
-#include "cipher.h"
+#include <fstream>
+#include "coding.h"
 
-int main(void)
+int main(int argc, char * argv[])
 {
-  std::cout << "Hello." << std::endl;
+
+  if (argc < 2) {
+    std::cout << "[Usage:] ./encode <filename>." << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  // Get filename from argumtens.
+  std::ifstream file(argv[1]);
+
+  char c;
+  while (file.get(c))
+    std::cout << c;
+  file.close();
 }
