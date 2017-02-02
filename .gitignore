@@ -6,3 +6,4 @@ helper_scripts
 objects
 text
 deps
+*.swp
