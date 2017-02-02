@@ -86,6 +86,8 @@ remove_dirs = \
 # Recipes.
 # --------
 
+# Exercise creation and running.
+
 all: exA1.txt
 
 run: all
@@ -100,7 +102,8 @@ exA1.txt: $(dir_exec)/hello
 	@echo "Simple Hello World program compiled do $(dir_exec)/hello." >\
 	       $(dir_txt)/$@
 
-# Compilation and linking operations.
+# Compilation, linking and folder operations.
+
 o_from_cc = $(CXX) $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
 exec_from_o = $(CXX) $(foreach object,$^,$(dir_objects)/$(object)) -o $@
 # Prepend @ sign if OUT_COMPILATION == False.
@@ -126,6 +129,8 @@ setup: $(helper_paths) $(dir_all)
 
 $(dir_all):
 	$(call create_dirs,$(dir_all))
+
+# Creating and writing helper scripts.
 
 $(helper_paths):
 	@# Bootstrap directory creation for helper scripts, since create_dirs uses
@@ -156,7 +161,7 @@ $(helper_paths):
 
 .PHONY: all setup remove clean
 
-# Include *d-files.
-# -----------------
+# *d-file inclusion.
+# ------------------
 D_FILES := $(foreach source,$(CC_sources),$(dir_deps)/$(source:.cc=.d))
 -include D_FILES
