@@ -18,7 +18,7 @@ export OUT_WARNING:=$(True)
 OUT_COMPILATION:=$(False)
 
 # Directories:
-dir_exec := executables
+dir_exec := bin
 dir_helpers := helper_scripts
 dir_objects := objects
 dir_sources := sources
