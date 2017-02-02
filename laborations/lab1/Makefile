@@ -54,7 +54,7 @@ export PATH := $(shell pwd)/$(dir_helpers):$(PATH)
 # Compiler options:
 # -----------------
 CPPFLAGS += -g -std=c++11 -Wall -Wextra -pedantic-errors -Wold-style-cast
-INCLUDE_FLAGS = -L$(dir_includes)
+INCLUDE_FLAGS = -I$(dir_includes)
 CPPFLAGS += $(INCLUDE_FLAGS)
 DEPFLAGS = -MT $@ -MMD -MP -MF $(dir_deps)/$*.d
 CXXFLAGS += $(DEPFLAGS)
