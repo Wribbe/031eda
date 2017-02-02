@@ -94,7 +94,7 @@ remove_dirs = \
 
 # Exercise creation and running.
 
-all: exA1.txt exA4.txt
+all: exA1.txt exA4.txt exA5.txt
 
 run: all
 	@echo_info "exA1.txt info:"
@@ -112,6 +112,11 @@ exA4.txt: $(dir_exec)/ltest
 	@echo_info "Creating: $@."
 	@echo "Test of linked list implementation for int variables, reults in"\
 		  "$(dir_exec)/ltest." > $(dir_txt)/$@
+
+exA5.txt: $(dir_exec)/encode $(dir_exec)/decode
+	@echo_info "Creating: $@."
+	@echo "Create basic text scrambelers and store them in"\
+		  "$(dir_exec)/(endcode/decode)." > $(dir_txt)/$@
 
 
 # Suppress compilation output if $(OUT_COMPILATION) == $(False).
@@ -131,6 +136,8 @@ $(dir_exec)/% : $(dir_objects)/%.o | setup
 # Specific executable dependencies:
 
 $(dir_exec)/ltest: $(dir_objects)/list.o
+
+$(dir_objects)/cipher.o : $(dir_exec)/decode $(dir_exec)/encode
 
 # Utility recipes:
 
