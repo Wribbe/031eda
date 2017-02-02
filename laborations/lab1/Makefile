@@ -61,6 +61,10 @@ DEPFLAGS = -MT $@ -MMD -MP -MF $(dir_deps)/$*.d
 CXXFLAGS += $(DEPFLAGS)
 CXX = g++
 
+# Compilation commands:
+o_from_cc = $(CXX) $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
+exec_from_o = $(CXX) $(foreach object,$^,$(dir_objects)/$(object)) -o $@
+
 # Utilities.
 # ----------
 
@@ -108,15 +112,13 @@ exA4.txt: $(dir_exec)/ltest
 	       $(dir_txt)/$@
 
 
-# Compilation, linking and folder operations.
-
-o_from_cc = $(CXX) $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
-exec_from_o = $(CXX) $(foreach object,$^,$(dir_objects)/$(object)) -o $@
-# Prepend @ sign if OUT_COMPILATION == False.
+# Suppress compilation output if OUT_COMPILATION == $(True).
 ifeq ($(OUT_COMPILATION), $(False))
 $(eval o_from_cc = @$(value o_from_cc))
 $(eval exec_from_o = @$(value exec_from_o))
 endif
+
+# Compilation recipes:
 
 %.o : %.cc
 	$(o_from_cc)
@@ -124,17 +126,21 @@ endif
 $(dir_exec)/%: %.o | setup
 	$(exec_from_o)
 
-clean:
+# Utility recipes:
+
+clean: # Remove most dirs, keep some.
 	$(call remove_dirs,$(dir_clean))
 	@rm -rf ._*
 
-remove:
+remove: # Thorough clean of all non-permanent files.
 	$(call remove_dirs,$(dir_remove))
 
-setup: $(helper_paths) $(dir_all)
+setup: $(helper_paths) $(dir_all) # Create helpers, and then dirs.
 
-$(dir_all):
+$(dir_all): # Create all directories.
 	$(call create_dirs,$(dir_all))
+
+re: remove all # Re-generate from fresh slate.
 
 # Creating and writing helper scripts.
 
