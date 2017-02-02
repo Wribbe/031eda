@@ -64,9 +64,8 @@ CXXFLAGS += $(DEPFLAGS)
 CXX = g++
 
 # Compilation commands:
-o_from_cc = $(CXX) $< -c $(CPPFLAGS) $(CXXFLAGS) -o $(dir_objects)/$@
-exec_from_o = $(CXX) -o $@ $(foreach object,$^,$(dir_objects)/$(object))\
-			  $(CPPFLAGS)
+o_from_cc = $(CXX) -c $< $(CPPFLAGS) $(CXXFLAGS) -o $@
+exec_from_o = $(CXX) -o $@ $^ $(CPPFLAGS)
 
 # Utilities.
 # ----------
@@ -123,10 +122,10 @@ endif
 
 # General compilation recipes:
 
-%.o : %.cc | setup
+$(dir_objects)/%.o : %.cc
 	$(o_from_cc)
 
-$(dir_exec)/%: %.o
+$(dir_exec)/% : $(dir_objects)/%.o | setup
 	$(exec_from_o)
 
 # Specific executable dependencies:
