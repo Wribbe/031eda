@@ -16,8 +16,8 @@ False:=False
 # Output control:
 export OUT_INFO:=$(True)
 export OUT_WARNING:=$(True)
-#OUT_COMPILATION:=$(False)
-OUT_COMPILATION:=$(True)
+OUT_COMPILATION:=$(False)
+#OUT_COMPILATION:=$(True)
 
 # Directories:
 dir_exec := bin
