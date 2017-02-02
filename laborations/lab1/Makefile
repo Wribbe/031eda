@@ -28,11 +28,11 @@ dir_includes := includes
 dir_txt := text
 dir_deps := deps
 dir_lib := lib
-# Directory lists:
-dir_clean := $(dir_exec) $(dir_objects) $(dir_txt) $(dir_deps)
-dir_remove := $(dir_clean) $(dir_helpers)
-dir_keep := $(dir_sources) $(dir_includes) $(dir_lib)
-dir_all := $(dir_remove) $(dir_keep)
+# Directory groupings:
+dirs_clean := $(dir_exec) $(dir_objects) $(dir_txt) $(dir_deps)
+dirs_remove := $(dirs_clean) $(dir_helpers)
+dirs_keep := $(dir_sources) $(dir_includes) $(dir_lib)
+dirs_all := $(dirs_remove) $(dirs_keep)
 
 # Set vpaths (vpath is for source only):
 vpath %.cc $(dir_sources)
@@ -135,16 +135,16 @@ $(dir_exec)/ltest: $(dir_objects)/list.o
 # Utility recipes:
 
 clean: # Remove most dirs, keep some.
-	$(call remove_dirs,$(dir_clean))
+	$(call remove_dirs,$(dirs_clean))
 	@rm -rf ._*
 
 remove: # Thorough clean of all non-permanent files.
-	$(call remove_dirs,$(dir_remove))
+	$(call remove_dirs,$(dirs_remove))
 
-setup: $(helper_paths) $(dir_all) # Create helpers, and then dirs.
+setup: $(helper_paths) $(dirs_all) # Create helpers, and then dirs.
 
-$(dir_all): # Create all directories.
-	$(call create_dirs,$(dir_all))
+$(dirs_all): # Create all directories.
+	$(call create_dirs,$(dirs_all))
 
 re: remove all # Re-generate from fresh slate.
 
