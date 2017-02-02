@@ -3,7 +3,8 @@
 
 # Make flags:
 # -----------
-MAKEFLAGS=--warn-undefined-variables
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
 
 # Variables.
 # ----------
