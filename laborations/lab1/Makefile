@@ -6,6 +6,43 @@
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
+# Utilities.
+# ----------
+
+create_dirs = \
+	@for dir in $(1) ; do \
+		if [ ! -d $$dir ]; then \
+		    echo_info "Can't find directory: <$$dir>, creating."; \
+			mkdir $$dir; \
+		fi \
+	done
+
+remove_dirs = \
+	@for dir in $(1) ; do \
+		if [ -d $$dir ]; then \
+			if [ -f "$(dir_helpers)/$(echo_info)" ]; then \
+			    echo_info "Removing directory <$$dir>."; \
+			fi; \
+			rm -rf $$dir; \
+		fi;\
+	done; \
+
+objs = $(foreach obj,$(1),$(dir_objects)/$(obj))
+execs = $(foreach exec,$(1),$(dir_exec)/$(exec))
+
+# Strip path from library dependency together with .a extension, prefix -l.
+libformatter = \
+	$(foreach libpath,$(1),\
+		-l$(patsubst lib%,%,\
+			$(notdir $(libpath:.a=)) \
+		)\
+	)
+
+# Return objects.
+get_obj = $(filter %.o,$(1))
+# Return static_libs.
+get_slibs = $(if $(filter %.a,$(1)),$(LDFLAGS) $(call libformatter,$(filter %.a,$(1))))
+
 # Variables.
 # ----------
 
@@ -16,6 +53,7 @@ False:=False
 # Output control:
 export OUT_INFO:=$(True)
 export OUT_WARNING:=$(True)
+OUTPUT_LIB = $(False)
 OUT_COMPILATION:=$(False)
 #OUT_COMPILATION:=$(True)
 
@@ -65,39 +103,19 @@ CPPFLAGS += $(INCLUDE_FLAGS)
 DEPFLAGS = -MT $@ -MMD -MP -MF $(dir_deps)/$*.d
 CXXFLAGS += $(DEPFLAGS)
 CXX = g++
+LDFLAGS += -L./$(dir_static_lib)
 
 # Compilation commands:
 o_from_cc = $(CXX) -c $< $(CPPFLAGS) $(CXXFLAGS) -o $@
-exec_from_o = $(CXX) -o $@ $^ $(CPPFLAGS)
-
-# Utilities.
-# ----------
-
-create_dirs = \
-	@for dir in $(1) ; do \
-		if [ ! -d $$dir ]; then \
-		    echo_info "Can't find directory: <$$dir>, creating."; \
-			mkdir $$dir; \
-		fi \
-	done
-
-remove_dirs = \
-	@for dir in $(1) ; do \
-		if [ -d $$dir ]; then \
-			if [ -f "$(dir_helpers)/$(echo_info)" ]; then \
-			    echo_info "Removing directory <$$dir>."; \
-			fi; \
-			rm -rf $$dir; \
-		fi;\
-	done; \
-
+exec_from_o = $(CXX) -o $@ $(call get_obj,$^) $(CPPFLAGS) $(call get_slibs,$^)
+a_from_os = ar crv $@ $^
 
 # Recipes.
 # --------
 
 # Exercise creation and running.
 
-all: exA1.txt exA4.txt exA5.txt
+all: exA1.txt exA4.txt exA5.txt exA8.txt
 
 run: all
 	@echo_info "exA1.txt info:"
@@ -121,12 +139,23 @@ exA5.txt: $(dir_exec)/encode $(dir_exec)/decode
 	@echo "Create basic text scrambelers and store them in"\
 		  "$(dir_exec)/(endcode/decode)." > $(dir_txt)/$@
 
+exA8.txt: $(call execs,static_ltest static_encode static_decode)
+	@echo_info "Creating: $@."
+	@echo "Assemble different objects into a static library and using it to "\
+		  "link to static_ltest,static_encode/_decode." > $(dir_txt)/$@
+
 
 # Suppress compilation output if $(OUT_COMPILATION) == $(False).
 ifeq ($(OUT_COMPILATION), $(False))
 $(eval o_from_cc = @$(value o_from_cc))
 $(eval exec_from_o = @$(value exec_from_o))
 endif
+# Suppress library creation output if $(OUTPUT_LIB) == $(False).
+ifeq ($(OUTPUT_LIB), $(False))
+$(eval a_from_os = @$(value a_from_os) > /dev/null)
+$(eval exec_with_lib = @$(value exec_with_lib))
+endif
+
 
 # General compilation recipes:
 
@@ -139,10 +168,13 @@ $(dir_exec)/% : $(dir_objects)/%.o | setup
 # Specific executable dependencies:
 
 $(dir_exec)/ltest: $(dir_objects)/list.o
+$(call execs,decode encode) : $(dir_objects)/coding.o
 
-#$(dir_objects)/coding.o : $(dir_exec)/decode $(dir_exec)/encode
-$(dir_exec)/decode : $(dir_objects)/coding.o
-$(dir_exec)/encode : $(dir_objects)/coding.o
+$(dir_exec)/static_% : $(dir_objects)/%.o $(dir_static_lib)/liblab1.a
+	$(exec_from_o)
+
+$(dir_static_lib)/liblab1.a : $(call objs,list.o coding.o)
+	$(a_from_os)
 
 # Utility recipes:
 
