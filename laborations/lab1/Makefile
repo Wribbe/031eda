@@ -216,7 +216,7 @@ $(helper_paths):
 	  echo "") > $(dir_helpers)/$(echo_warning)
 	@# Make echo_warning executable.
 	@chmod a+x $(dir_helpers)/$(echo_warning)
-	@echo_info "Helper scrips created."
+	@echo_info "Helper scripts created."
 
 # Phony targets.
 # --------------
