@@ -30,8 +30,9 @@ dir_deps := deps
 dir_lib := lib
 dir_inputs := input
 dir_output := output
+dir_static_lib := $(dir_exec)/static_libs
 # Directory groupings:
-dirs_clean := $(dir_exec) $(dir_objects) $(dir_txt) $(dir_deps) $(dir_output)
+dirs_clean := $(dir_exec) $(dir_static_lib) $(dir_objects) $(dir_txt) $(dir_deps) $(dir_output)
 dirs_remove := $(dirs_clean) $(dir_helpers)
 dirs_keep := $(dir_sources) $(dir_includes) $(dir_lib) $(dir_input)
 dirs_all := $(dirs_remove) $(dirs_keep)
