@@ -203,7 +203,7 @@ $(helper_paths):
 	@# Write echo_info utility to disk.
 	@(echo "#!/bin/sh" &&\
 	  echo "if [ \"\$$OUT_INFO\" = \"$(True)\" ] ; then"  &&\
-	  echo "   echo [?]: \$$1;" &&\
+	  echo "   echo [.]: \$$1;" &&\
 	  echo "fi" &&\
 	  echo "") > $(dir_helpers)/$(echo_info)
 	@# Make echo_info executable.
