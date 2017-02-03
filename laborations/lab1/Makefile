@@ -221,7 +221,7 @@ $(helper_paths):
 # Phony targets.
 # --------------
 
-.PHONY: all setup remove clean
+.PHONY: all setup remove clean re
 
 # *d-file inclusion.
 # ------------------
