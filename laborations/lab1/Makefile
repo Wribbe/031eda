@@ -1,125 +1,16 @@
 # Makefile for C++ laboratory session 01.
 # ---------------------------------------
 
-# Make flags:
-# -----------
-MAKEFLAGS += --warn-undefined-variables
-MAKEFLAGS += --no-builtin-rules
-
-# Utilities.
-# ----------
-
-create_dirs = \
-	@for dir in $(1) ; do \
-		if [ ! -d $$dir ]; then \
-		    echo_info "Can't find directory: <$$dir>, creating."; \
-			mkdir $$dir; \
-		fi \
-	done
-
-remove_dirs = \
-	@for dir in $(1) ; do \
-		if [ -d $$dir ]; then \
-			if [ -f "$(dir_helpers)/$(echo_info)" ]; then \
-			    echo_info "Removing directory <$$dir>."; \
-			fi; \
-			rm -rf $$dir; \
-		fi;\
-	done; \
-
-objs = $(foreach obj,$(1),$(dir_objects)/$(obj))
-fobjs = $(foreach obj,$(1),$(dir_objects_fpic)/$(obj))
-execs = $(foreach exec,$(1),$(dir_exec)/$(exec))
-
-# Return the base name without any suffixes.
-strip_suffixes = $(firstword $(subst ., ,$(1)))
-
-# Strip path from library dependency together with any suffix, add prefix -l.
-libformatter = \
-	$(foreach libpath,$(1),\
-		-l$(patsubst lib%,%,\
-			$(notdir $(call strip_suffixes,$(libpath)))\
-		)\
-	)
-
-# Return objects.
-get_obj = $(filter %.o,$(1))
-# Return static_libs.
-get_slibs = $(if $(filter %.a,$(1)),$(LDFLAGS) \
-				$(call libformatter,$(filter %.a,$(1))))
-# Get dynamic libraries.
-filter_so = $(foreach lib,$(1),\
-				$(if $(findstring .so.,$(lib)),\
-					$(lib)\
-				)\
-			)
-
-get_dlibs = $(if $(call filter_so,$(1)),\
-				$(DYNAMIC_LDFLAGS)/ -Wl$(,)-rpath=./$(dir_dynamic_lib)\
-				$(call libformatter,$(call filter_so,$(1)))\
-			)
-
-soname = $(patsubst $(suffix $(1)),,$(1)) # Remove last .x part from libname.
-
-# Variables.
-# ----------
-
-# Special character escapes.
-,:=,# Write $(,) to include a comma.
-
-# Boolean variables:
-True:=True
-False:=False
+dir_make_utils = makefile_utils
+include $(dir_make_utils)/preamble_makefile
 
 # Output control:
 export OUT_INFO := $(True)
 export OUT_WARNING := $(True)
-OUTPUT_LIB := $(False)
-OUT_COMPILATION := $(False)
-#OUT_COMPILATION:=$(True)
+OUT_COMPILATION:=$(True)
+#OUT_COMPILATION := $(False)
 OUTPUT_DYN_LIB := $(False)
-
-# Directories:
-dir_exec := bin
-dir_helpers := helper_scripts
-dir_objects := objects
-dir_sources := sources
-dir_includes := includes
-dir_txt := text
-dir_deps := deps
-dir_lib := lib
-dir_inputs := input
-dir_output := output
-dir_static_lib := $(dir_exec)/static_libs
-dir_dynamic_lib := $(dir_exec)/dynamic_libs
-dir_objects_fpic := $(dir_objects)/fPIC
-# Directory groupings:
-dirs_clean := $(dir_exec) $(dir_static_lib) $(dir_objects) $(dir_txt) \
-				$(dir_deps) $(dir_output) $(dir_dynamic_lib) \
-			   	$(dir_objects_fpic)
-dirs_remove := $(dirs_clean) $(dir_helpers)
-dirs_keep := $(dir_sources) $(dir_includes) $(dir_lib) $(dir_input)
-dirs_all := $(dirs_remove) $(dirs_keep)
-
-# Set vpaths (vpath is for source only):
-vpath %.cc $(dir_sources)
-vpath %.cc $(dir_lib)
-vpath %.txt $(dir_txt)
-vpath %.d $(dir_deps)
-
-# File_lists:
-CC_sources = $(foreach path,\
-			 	$(wildcard $(dir_sources)/*.cc),\
-				$(patsubst $(dir_sources)/%,%,$(path))\
-			  )
-
-# Output scripts.
-echo_info := echo_info
-echo_warning := echo_warning
-helpers := $(echo_info) $(echo_warning)
-helper_paths := $(foreach name,$(helpers),$(dir_helpers)/$(name))
-# Add helpers to path.
-export PATH := $(shell pwd)/$(dir_helpers):$(PATH)
+OUTPUT_LIB := $(False)
 
 # Compiler options:
 # -----------------
@@ -139,8 +30,20 @@ exec_from_o = $(CXX) -o $@ $(call get_obj,$^) $(CPPFLAGS) $(call get_slibs,$^) \
 a_from_os = ar crv $@ $^
 so_from_os = $(CXX) -shared -Wl,-soname,$(call soname,$(notdir $@)) -o $@ $^
 
+include $(dir_make_utils)/suppression_makefile
+
 # Recipes.
 # --------
+
+# Library dependencies.
+$(dir_dynamic_lib)/liblab1.so.1 : $(call fobjs, list.o coding.o)
+$(dir_static_lib)/liblab1.a : $(call objs,list.o coding.o)
+
+$(dir_exec)/ltest: $(dir_objects)/list.o
+$(call execs,decode encode) : $(dir_objects)/coding.o
+
+$(call execs,static_ltest static_encode static_decode) : $(dir_static_lib)/liblab1.a
+$(call execs,dynamic_ltest dynamic_encode dynamic_decode) : $(dir_dynamic_lib)/liblab1.so.1
 
 # Exercise creation and running.
 
@@ -154,6 +57,7 @@ run: all
 	@echo_info "Executing exA1 done."
 
 exA1.txt: $(dir_exec)/hello
+	@echo TEST: $(findstring .so.,"this is a test.so.")
 	@echo_info "Creating: $@."
 	@echo "Simple Hello World program compiled to $(dir_exec)/hello." >\
 	       $(dir_txt)/$@
@@ -178,101 +82,4 @@ exA9.txt: $(call execs,dynamic_ltest dynamic_encode dynamic_decode)
 	@echo "Assemble different objects into a dynamic library and using it to "\
 		  "link to dynamic_ltest,dynamic_encode/_decode." > $(dir_txt)/$@
 
-
-# Suppress compilation output if $(OUT_COMPILATION) == $(False).
-ifeq ($(OUT_COMPILATION), $(False))
-$(eval o_from_cc = @$(value o_from_cc))
-$(eval exec_from_o = @$(value exec_from_o))
-endif
-# Suppress library creation output if $(OUTPUT_LIB) == $(False).
-ifeq ($(OUTPUT_LIB), $(False))
-$(eval a_from_os = @$(value a_from_os) > /dev/null)
-$(eval exec_with_lib = @$(value exec_with_lib))
-endif
-# Suppress dynamic library output if $(OUTPUT_DYN_LIB) == $(False).
-ifeq ($(OUTPUT_DYN_LIB), $(False))
-$(eval so_from_os = @$(value so_from_os))
-endif
-
-
-# General compilation recipes:
-
-$(dir_objects)/%.o : %.cc
-	$(o_from_cc)
-
-$(dir_objects_fpic)/%.o : %.cc
-	$(o_from_cc) -fPIC
-
-$(dir_exec)/% : $(dir_objects)/%.o | setup
-	$(exec_from_o)
-
-# Specific executable dependencies:
-
-$(dir_exec)/ltest: $(dir_objects)/list.o
-$(call execs,decode encode) : $(dir_objects)/coding.o
-
-$(dir_exec)/static_% : $(dir_objects)/%.o $(dir_static_lib)/liblab1.a
-	$(exec_from_o)
-
-$(dir_exec)/dynamic_% : $(dir_objects)/%.o $(dir_dynamic_lib)/liblab1.so.1
-	$(exec_from_o)
-
-$(dir_static_lib)/liblab1.a : $(call objs,list.o coding.o)
-	$(a_from_os)
-
-.SECONDARY: $(wildcard $(dir_dynamic_lib)/*)
-$(dir_dynamic_lib)/liblab1.so% : $(call fobjs, list.o coding.o)
-	$(so_from_os)
-	@cd $(dir_dynamic_lib); ln -s $(notdir $@) $(notdir \
-			$(call strip_suffixes,$@).so)
-
-# Utility recipes:
-
-clean: # Remove most dirs, keep some.
-	$(call remove_dirs,$(dirs_clean))
-
-remove: # Thorough clean of all non-permanent files.
-	$(call remove_dirs,$(dirs_remove))
-
-setup: $(helper_paths) $(dirs_all) # Create helpers, and then dirs.
-
-$(dirs_all): # Create all directories.
-	$(call create_dirs,$(dirs_all))
-
-re: remove all # Re-generate from fresh slate.
-
-# Creating and writing helper scripts.
-
-$(helper_paths):
-	@# Bootstrap directory creation for helper scripts, since create_dirs uses
-	@# helper scripts.
-	@if [ ! -d $(dir_helpers) ] ; then \
-		mkdir $(dir_helpers); \
-	 fi
-	@# Write echo_info utility to disk.
-	@(echo "#!/bin/sh" &&\
-	  echo "if [ \"\$$OUT_INFO\" = \"$(True)\" ] ; then"  &&\
-	  echo "   echo [~]: \$$1;" &&\
-	  echo "fi" &&\
-	  echo "") > $(dir_helpers)/$(echo_info)
-	@# Make echo_info executable.
-	@chmod a+x $(dir_helpers)/$(echo_info)
-	@# Write echo_warning utility to disk.
-	@(echo "#!/bin/sh" &&\
-	  echo "if [ \"\$$OUT_WARNING\" = \"$(True)\" ] ; then"  &&\
-	  echo "   echo [!]: \$$1;" &&\
-	  echo "fi" &&\
-	  echo "") > $(dir_helpers)/$(echo_warning)
-	@# Make echo_warning executable.
-	@chmod a+x $(dir_helpers)/$(echo_warning)
-	@echo_info "Helper scripts created."
-
-# Phony targets.
-# --------------
-
-.PHONY: all setup remove clean re
-
-# *d-file inclusion.
-# ------------------
-D_FILES := $(foreach source,$(CC_sources),$(dir_deps)/$(source:.cc=.d))
--include D_FILES
+include $(dir_make_utils)/postamble_makefile

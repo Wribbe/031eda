@@ -1,0 +1,77 @@
+# General compilation recipes:
+
+$(dir_objects)/%.o : %.cc
+	$(o_from_cc)
+
+$(dir_objects_fpic)/%.o : %.cc
+	$(o_from_cc) -fPIC
+
+$(dir_exec)/% : $(dir_objects)/%.o | setup
+	$(exec_from_o)
+
+$(dir_exec)/static_% : $(dir_objects)/%.o
+	$(exec_from_o)
+
+$(dir_exec)/dynamic_% : $(dir_objects)/%.o
+	$(exec_from_o)
+
+$(dir_static_lib)/%.a :
+	$(a_from_os)
+
+$(dir_dynamic_lib)/% :
+	$(so_from_os)
+	@cd $(dir_dynamic_lib) && ln -s $(notdir $@) $(notdir \
+			$(call strip_suffixes,$@).so)
+
+.SECONDARY: $(wildcard $(dir_dynamic_lib)/*)
+
+# Utility recipes:
+
+clean: # Remove most dirs, keep some.
+	$(call remove_dirs,$(dirs_clean))
+
+remove: # Thorough clean of all non-permanent files.
+	$(call remove_dirs,$(dirs_remove))
+
+setup: $(helper_paths) $(dirs_all) # Create helpers, and then dirs.
+
+$(dirs_all): # Create all directories.
+	$(call create_dirs,$(dirs_all))
+
+re: remove all # Re-generate from fresh slate.
+
+# Creating and writing helper scripts.
+
+$(helper_paths):
+	@# Bootstrap directory creation for helper scripts, since create_dirs uses
+	@# helper scripts.
+	@if [ ! -d $(dir_helpers) ] ; then \
+		mkdir $(dir_helpers); \
+	 fi
+	@# Write echo_info utility to disk.
+	@(echo "#!/bin/sh" &&\
+	  echo "if [ \"\$$OUT_INFO\" = \"$(True)\" ] ; then"  &&\
+	  echo "   echo [~]: \$$1;" &&\
+	  echo "fi" &&\
+	  echo "") > $(dir_helpers)/$(echo_info)
+	@# Make echo_info executable.
+	@chmod a+x $(dir_helpers)/$(echo_info)
+	@# Write echo_warning utility to disk.
+	@(echo "#!/bin/sh" &&\
+	  echo "if [ \"\$$OUT_WARNING\" = \"$(True)\" ] ; then"  &&\
+	  echo "   echo [!]: \$$1;" &&\
+	  echo "fi" &&\
+	  echo "") > $(dir_helpers)/$(echo_warning)
+	@# Make echo_warning executable.
+	@chmod a+x $(dir_helpers)/$(echo_warning)
+	@echo_info "Helper scripts created."
+
+# Phony targets.
+# --------------
+
+.PHONY: all setup remove clean re
+
+# *d-file inclusion.
+# ------------------
+D_FILES := $(foreach source,$(CC_sources),$(dir_deps)/$(source:.cc=.d))
+-include D_FILES
