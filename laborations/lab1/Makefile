@@ -28,34 +28,56 @@ remove_dirs = \
 	done; \
 
 objs = $(foreach obj,$(1),$(dir_objects)/$(obj))
+fobjs = $(foreach obj,$(1),$(dir_objects_fpic)/$(obj))
 execs = $(foreach exec,$(1),$(dir_exec)/$(exec))
 
-# Strip path from library dependency together with .a extension, prefix -l.
+# Return the base name without any suffixes.
+strip_suffixes = $(firstword $(subst ., ,$(1)))
+
+# Strip path from library dependency together with any suffix, add prefix -l.
 libformatter = \
 	$(foreach libpath,$(1),\
 		-l$(patsubst lib%,%,\
-			$(notdir $(libpath:.a=)) \
+			$(notdir $(call strip_suffixes,$(libpath)))\
 		)\
 	)
 
 # Return objects.
 get_obj = $(filter %.o,$(1))
 # Return static_libs.
-get_slibs = $(if $(filter %.a,$(1)),$(LDFLAGS) $(call libformatter,$(filter %.a,$(1))))
+get_slibs = $(if $(filter %.a,$(1)),$(LDFLAGS) \
+				$(call libformatter,$(filter %.a,$(1))))
+# Get dynamic libraries.
+filter_so = $(foreach lib,$(1),\
+				$(if $(findstring .so.,$(lib)),\
+					$(lib)\
+				)\
+			)
+
+get_dlibs = $(if $(call filter_so,$(1)),\
+				$(DYNAMIC_LDFLAGS)/ -Wl$(,)-rpath=./$(dir_dynamic_lib)\
+				$(call libformatter,$(call filter_so,$(1)))\
+			)
+
+soname = $(patsubst $(suffix $(1)),,$(1)) # Remove last .x part from libname.
 
 # Variables.
 # ----------
+
+# Special character escapes.
+,:=,# Write $(,) to include a comma.
 
 # Boolean variables:
 True:=True
 False:=False
 
 # Output control:
-export OUT_INFO:=$(True)
-export OUT_WARNING:=$(True)
-OUTPUT_LIB = $(False)
-OUT_COMPILATION:=$(False)
+export OUT_INFO := $(True)
+export OUT_WARNING := $(True)
+OUTPUT_LIB := $(False)
+OUT_COMPILATION := $(False)
 #OUT_COMPILATION:=$(True)
+OUTPUT_DYN_LIB := $(False)
 
 # Directories:
 dir_exec := bin
@@ -69,8 +91,12 @@ dir_lib := lib
 dir_inputs := input
 dir_output := output
 dir_static_lib := $(dir_exec)/static_libs
+dir_dynamic_lib := $(dir_exec)/dynamic_libs
+dir_objects_fpic := $(dir_objects)/fPIC
 # Directory groupings:
-dirs_clean := $(dir_exec) $(dir_static_lib) $(dir_objects) $(dir_txt) $(dir_deps) $(dir_output)
+dirs_clean := $(dir_exec) $(dir_static_lib) $(dir_objects) $(dir_txt) \
+				$(dir_deps) $(dir_output) $(dir_dynamic_lib) \
+			   	$(dir_objects_fpic)
 dirs_remove := $(dirs_clean) $(dir_helpers)
 dirs_keep := $(dir_sources) $(dir_includes) $(dir_lib) $(dir_input)
 dirs_all := $(dirs_remove) $(dirs_keep)
@@ -104,18 +130,21 @@ DEPFLAGS = -MT $@ -MMD -MP -MF $(dir_deps)/$*.d
 CXXFLAGS += $(DEPFLAGS)
 CXX = g++
 LDFLAGS += -L./$(dir_static_lib)
+DYNAMIC_LDFLAGS += -L./$(dir_dynamic_lib)
 
 # Compilation commands:
 o_from_cc = $(CXX) -c $< $(CPPFLAGS) $(CXXFLAGS) -o $@
-exec_from_o = $(CXX) -o $@ $(call get_obj,$^) $(CPPFLAGS) $(call get_slibs,$^)
+exec_from_o = $(CXX) -o $@ $(call get_obj,$^) $(CPPFLAGS) $(call get_slibs,$^) \
+			  $(call get_dlibs,$^)
 a_from_os = ar crv $@ $^
+so_from_os = $(CXX) -shared -Wl,-soname,$(call soname,$(notdir $@)) -o $@ $^
 
 # Recipes.
 # --------
 
 # Exercise creation and running.
 
-all: exA1.txt exA4.txt exA5.txt exA8.txt
+all: exA1.txt exA4.txt exA5.txt exA8.txt exA9.txt
 
 run: all
 	@echo_info "exA1.txt info:"
@@ -144,6 +173,11 @@ exA8.txt: $(call execs,static_ltest static_encode static_decode)
 	@echo "Assemble different objects into a static library and using it to "\
 		  "link to static_ltest,static_encode/_decode." > $(dir_txt)/$@
 
+exA9.txt: $(call execs,dynamic_ltest dynamic_encode dynamic_decode)
+	@echo_info "Creating: $@."
+	@echo "Assemble different objects into a dynamic library and using it to "\
+		  "link to dynamic_ltest,dynamic_encode/_decode." > $(dir_txt)/$@
+
 
 # Suppress compilation output if $(OUT_COMPILATION) == $(False).
 ifeq ($(OUT_COMPILATION), $(False))
@@ -155,12 +189,19 @@ ifeq ($(OUTPUT_LIB), $(False))
 $(eval a_from_os = @$(value a_from_os) > /dev/null)
 $(eval exec_with_lib = @$(value exec_with_lib))
 endif
+# Suppress dynamic library output if $(OUTPUT_DYN_LIB) == $(False).
+ifeq ($(OUTPUT_DYN_LIB), $(False))
+$(eval so_from_os = @$(value so_from_os))
+endif
 
 
 # General compilation recipes:
 
 $(dir_objects)/%.o : %.cc
 	$(o_from_cc)
+
+$(dir_objects_fpic)/%.o : %.cc
+	$(o_from_cc) -fPIC
 
 $(dir_exec)/% : $(dir_objects)/%.o | setup
 	$(exec_from_o)
@@ -173,14 +214,22 @@ $(call execs,decode encode) : $(dir_objects)/coding.o
 $(dir_exec)/static_% : $(dir_objects)/%.o $(dir_static_lib)/liblab1.a
 	$(exec_from_o)
 
+$(dir_exec)/dynamic_% : $(dir_objects)/%.o $(dir_dynamic_lib)/liblab1.so.1
+	$(exec_from_o)
+
 $(dir_static_lib)/liblab1.a : $(call objs,list.o coding.o)
 	$(a_from_os)
+
+.SECONDARY: $(wildcard $(dir_dynamic_lib)/*)
+$(dir_dynamic_lib)/liblab1.so% : $(call fobjs, list.o coding.o)
+	$(so_from_os)
+	@cd $(dir_dynamic_lib); ln -s $(notdir $@) $(notdir \
+			$(call strip_suffixes,$@).so)
 
 # Utility recipes:
 
 clean: # Remove most dirs, keep some.
 	$(call remove_dirs,$(dirs_clean))
-	@rm -rf ._*
 
 remove: # Thorough clean of all non-permanent files.
 	$(call remove_dirs,$(dirs_remove))
