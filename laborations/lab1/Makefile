@@ -1,14 +1,14 @@
 # Makefile for C++ laboratory session 01.
 # ---------------------------------------
 
-dir_make_utils = makefile_utils
+dir_make_utils = ../makefile_utils
 include $(dir_make_utils)/preamble_makefile
 
 # Output control:
 export OUT_INFO := $(True)
 export OUT_WARNING := $(True)
-OUT_COMPILATION:=$(True)
-#OUT_COMPILATION := $(False)
+#OUT_COMPILATION:=$(True)
+OUT_COMPILATION := $(False)
 OUTPUT_DYN_LIB := $(False)
 OUTPUT_LIB := $(False)
 
@@ -57,7 +57,6 @@ run: all
 	@echo_info "Executing exA1 done."
 
 exA1.txt: $(dir_exec)/hello
-	@echo TEST: $(findstring .so.,"this is a test.so.")
 	@echo_info "Creating: $@."
 	@echo "Simple Hello World program compiled to $(dir_exec)/hello." >\
 	       $(dir_txt)/$@
