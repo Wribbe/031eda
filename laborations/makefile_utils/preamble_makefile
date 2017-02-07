@@ -90,7 +90,7 @@ dirs_clean := $(dir_exec) $(dir_static_lib) $(dir_objects) $(dir_txt) \
 				$(dir_deps) $(dir_output) $(dir_dynamic_lib) \
 			   	$(dir_objects_fpic)
 dirs_remove := $(dirs_clean) $(dir_helpers)
-dirs_keep := $(dir_sources) $(dir_includes) $(dir_lib) $(dir_input)
+dirs_keep := $(dir_sources) $(dir_includes) $(dir_lib) $(dir_inputs)
 dirs_all := $(dirs_remove) $(dirs_keep)
 
 # Set vpaths (vpath is for source only):
