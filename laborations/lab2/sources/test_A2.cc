@@ -12,4 +12,6 @@ int main(void)
     }
 
     Dictionary default_dict;
+    std::cout << "Default dictionary currently contains: " << \
+        default_dict.size() << " words." << std::endl;
 }

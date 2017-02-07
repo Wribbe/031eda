@@ -50,7 +50,7 @@ Dictionary::Dictionary(const std::string& input_path) :
             std::vector<std::string> current_tokens;
             current_tokens = split_string(current_line, delimiters);
             std::string word = current_tokens[0];
-            std::cout << word << std::endl;
+            this->internal_set.insert(word);
         }
     }
     // Close input file.
