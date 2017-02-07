@@ -1,4 +1,4 @@
-# Makefile for C++ laboratory session 01.
+# Makefile for C++ laboratory session 02.
 # ---------------------------------------
 
 dir_make_utils = ../makefile_utils
@@ -39,6 +39,14 @@ include $(dir_make_utils)/suppression_makefile
 
 # Exercise creation and running.
 
-all: | setup
+extxt = $(foreach exercise,${1},ex${exercise}.txt)
+exercises = $(call extxt, A1)
+
+all: $(exercises) | setup
+
+$(dir_txt)/exA1.txt: $(call execs,process_words)
+	@echo_info "Creating $@."
+	@echo "Creating preprocessed word list from input/words.txt to" \
+		"output/proc-words.txt" > $@
 
 include $(dir_make_utils)/postamble_makefile
