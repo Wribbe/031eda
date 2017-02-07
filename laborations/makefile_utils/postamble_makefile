@@ -74,4 +74,4 @@ $(helper_paths):
 # *d-file inclusion.
 # ------------------
 D_FILES := $(foreach source,$(CC_sources),$(dir_deps)/$(source:.cc=.d))
--include D_FILES
+-include $(D_FILES)
