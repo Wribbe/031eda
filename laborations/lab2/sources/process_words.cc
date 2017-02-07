@@ -3,6 +3,7 @@
 #include <iostream>     // cin/cout/cerr.
 #include <istream>      //
 #include <string>       // string.
+#include <sstream>      // stringstream.
 #include <vector>       // vector.
 
 std::vector<std::string> make_ngrams(std::string string, size_t ngram_size)
@@ -22,6 +23,26 @@ std::vector<std::string> make_ngrams(std::string string, size_t ngram_size)
     std::sort(return_vector.begin(), return_vector.end());
     // Return sorted vector.
     return return_vector;
+}
+
+
+std::string make_output_string(std::string word,
+                               std::vector<std::string> ngrams)
+    /* Take a word and its n-gram vector and return a string that matches the
+     * desired output format. */
+{
+    std::stringstream buffer;
+    buffer << word << " ";
+    size_t num_ngrams = ngrams.size();
+    buffer << num_ngrams << " ";
+    for (size_t i = 0; i<num_ngrams; ++i) {
+        buffer << ngrams[i];
+        // Don't append after last ngram.
+        if (i < num_ngrams-1) {
+            buffer << " ";
+        }
+    }
+    return buffer.str();
 }
 
 
@@ -48,9 +69,7 @@ int main(int argc, char * argv[])
     // Process and print all the lines in the file.
     std::string line = "";
     while (std::getline(input_file, line)) {
-        for (std::string string : make_ngrams(line, 3)) {
-            std::cout << string << " ";
-        }
-        std::cout << std::endl;
+        std::vector<std::string> ngrams = make_ngrams(line, 3);
+        std::cout << make_output_string(line, ngrams) << std::endl;
     }
 }
