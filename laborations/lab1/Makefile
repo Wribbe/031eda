@@ -35,19 +35,9 @@ include $(dir_make_utils)/suppression_makefile
 # Recipes.
 # --------
 
-# Library dependencies.
-$(dir_dynamic_lib)/liblab1.so.1 : $(call fobjs, list.o coding.o)
-$(dir_static_lib)/liblab1.a : $(call objs,list.o coding.o)
-
-$(dir_exec)/ltest: $(dir_objects)/list.o
-$(call execs,decode encode) : $(dir_objects)/coding.o
-
-$(call execs,static_ltest static_encode static_decode) : $(dir_static_lib)/liblab1.a
-$(call execs,dynamic_ltest dynamic_encode dynamic_decode) : $(dir_dynamic_lib)/liblab1.so.1
-
 # Exercise creation and running.
 
-all: exA1.txt exA4.txt exA5.txt exA8.txt exA9.txt
+all: exA1.txt exA4.txt exA5.txt exA8.txt exA9.txt | setup
 
 run: all
 	@echo_info "exA1.txt info:"
@@ -80,5 +70,15 @@ exA9.txt: $(call execs,dynamic_ltest dynamic_encode dynamic_decode)
 	@echo_info "Creating: $@."
 	@echo "Assemble different objects into a dynamic library and using it to "\
 		  "link to dynamic_ltest,dynamic_encode/_decode." > $(dir_txt)/$@
+
+# Library dependencies.
+$(dir_dynamic_lib)/liblab1.so.1 : $(call fobjs, list.o coding.o)
+$(dir_static_lib)/liblab1.a : $(call objs,list.o coding.o)
+
+$(dir_exec)/ltest: $(dir_objects)/list.o
+$(call execs,decode encode) : $(dir_objects)/coding.o
+
+$(call execs,static_ltest static_encode static_decode) : $(dir_static_lib)/liblab1.a
+$(call execs,dynamic_ltest dynamic_encode dynamic_decode) : $(dir_dynamic_lib)/liblab1.so.1
 
 include $(dir_make_utils)/postamble_makefile
