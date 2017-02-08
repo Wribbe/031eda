@@ -15,6 +15,7 @@ OUTPUT_LIB := $(False)
 
 # Functionality toggles:
 GIT_TARGETS := $(True)
+SUPPRESS_GIT_OUTPUT := $(True)
 
 # Compiler options:
 # -----------------
