@@ -7,6 +7,6 @@
 #include "assert.h"
 
 void test(bool assertion, std::string message = "");
-void print_test_results(void);
+int print_test_results(void);
 
 #endif

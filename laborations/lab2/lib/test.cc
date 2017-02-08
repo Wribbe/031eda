@@ -21,10 +21,11 @@ void test(bool assertion, std::string message)
     std::cerr << buffer.str();
 }
 
-void print_test_results(void)
+int print_test_results(void)
     /* Print result of tests. */
 {
     std::cout << "--------" << std::endl;
     std::cout <<  "Result: " << fails << "/" << counter << \
         " assertions failed." << std::endl;
+    return fails;
 }

@@ -27,5 +27,5 @@ int main(void)
     test(word.get_matches("aabbbaaa") == 1,
         "Returned number of trigrams for longer string should be 1.");
 
-    print_test_results();
+    int fails = print_test_results();
 }
