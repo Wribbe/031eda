@@ -9,6 +9,8 @@
 int main(void)
     /* Create and test the Word class. */
 {
+    print_test_header("Class Word");
+
     std::string input_word = "aaa";
 
     Word word(input_word);
@@ -28,4 +30,7 @@ int main(void)
         "Returned number of trigrams for longer string should be 1.");
 
     int fails = print_test_results();
+    if (fails > 0) {
+        return EXIT_FAILURE;
+    }
 }

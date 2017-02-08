@@ -29,3 +29,10 @@ int print_test_results(void)
         " assertions failed." << std::endl;
     return fails;
 }
+
+void print_test_header(std::string target)
+    /* Print test header. */
+{
+    std::cout << "Running tests for: " << target << "." << std::endl;
+    std::cout << "========" << std::endl;
+}
