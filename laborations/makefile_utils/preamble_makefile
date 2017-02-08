@@ -61,6 +61,17 @@ get_dlibs = $(if $(strip $(call filter_so,$(1))),\
 
 soname = $(patsubst $(suffix $(1)),,$(1)) # Remove last .x part from libname.
 
+# Function for assigning that a prerequisite should be built at a specific
+# git-tag/-branch.
+git = $(2)@$(1).git-revision
+
+# Suppress output from commands on the command line.
+supress_output = 1>/dev/null 2>&1
+
+# Functions that enable switching git-context.
+git_start = git checkout $(1) $(supress_output) &&$(2)
+git_end = && git checkout $(supress_output) $(1)
+
 # Variables.
 # ----------
 

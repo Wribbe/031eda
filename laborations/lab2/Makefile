@@ -12,6 +12,10 @@ OUT_COMPILATION := $(False)
 OUTPUT_DYN_LIB := $(False)
 OUTPUT_LIB := $(False)
 
+
+# Functionality toggles:
+GIT_TARGETS := $(True)
+
 # Compiler options:
 # -----------------
 CPPFLAGS += -g -std=c++11 -Wall -Wextra -pedantic-errors -Wold-style-cast
@@ -55,10 +59,9 @@ $(dir_txt)/exA1.txt: $(call execs,process_words) $(dir_output)/proc-words.txt
 # test_A2 dependencies.
 $(call execs,test_A2) : $(call objs,dictionary.o)
 
-$(dir_txt)/exA2.txt: $(call execs,test_A2)
+$(dir_txt)/exA2.txt: $(call git,L02-A2,$(call execs,test_A2))
 	@echo_info "Creating $@."
 	@echo "Complete the Dictionary constructor." \
 		"output/proc-words.txt" > $@
-
 
 include $(dir_make_utils)/postamble_makefile
