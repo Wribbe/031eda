@@ -13,7 +13,8 @@ ifeq ($(OUTPUT_DYN_LIB), $(False))
 $(eval so_from_os = @$(value so_from_os))
 endif
 
-commands = o_from_cc exec_from_o a_from_os exec_with_lib so_from_os
+#commands = o_from_cc exec_from_o a_from_os exec_with_lib so_from_os
+commands = o_from_cc a_from_os so_from_os
 # Enable git-instruction targets if $(GIT_TARGETS) == $(True).
 ifeq ($(GIT_TARGETS), $(True))
 ifdef GIT_CHANGE_FROM
