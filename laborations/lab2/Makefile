@@ -58,7 +58,7 @@ $(dir_txt)/exA1.txt: $(call execs,process_words) $(dir_output)/proc-words.txt
 		"output/proc-words.txt" > $@
 
 # test_A2 dependencies.
-$(call execs,test_A2) : $(call objs,dictionary.o ngrams.o)
+$(call execs,test_A2) : $(call objs,dictionary.o)
 
 $(dir_txt)/exA2.txt: $(call git,L02-A2,$(call execs,test_A2))
 	@echo_info "Creating $@."
