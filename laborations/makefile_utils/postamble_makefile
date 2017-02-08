@@ -6,7 +6,7 @@ $(dir_objects)/%.o : %.cc
 $(dir_objects_fpic)/%.o : %.cc
 	$(o_from_cc) -fPIC
 
-$(dir_exec)/% : $(dir_objects)/%.o | setup
+$(dir_exec)/% : $(dir_objects)/%.o
 	$(exec_from_o)
 
 $(dir_exec)/static_% : $(dir_objects)/%.o

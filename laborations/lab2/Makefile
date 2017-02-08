@@ -7,8 +7,8 @@ include $(dir_make_utils)/preamble_makefile
 # Output control:
 export OUT_INFO := $(True)
 export OUT_WARNING := $(True)
-#OUT_COMPILATION:=$(True)
-OUT_COMPILATION := $(False)
+OUT_COMPILATION:=$(True)
+#OUT_COMPILATION := $(False)
 OUTPUT_DYN_LIB := $(False)
 OUTPUT_LIB := $(False)
 
