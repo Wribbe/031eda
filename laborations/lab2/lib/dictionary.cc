@@ -7,8 +7,7 @@
 
 #include "word.h"
 #include "dictionary.h"
-
-using namespace std;
+#include "ngrams.h"
 
 std::vector<std::string> split_string(std::string string, std::string delims)
     /* Split string on any occurrence of a character described by the string
@@ -57,7 +56,7 @@ Dictionary::Dictionary(const std::string& input_path) :
     file_handle.close();
 }
 
-bool Dictionary::contains(const string& word) const
+bool Dictionary::contains(const std::string& word) const
     /* Return boolean reflecting if word is present in dictionary or not. */
 {
     return internal_set.find(word) != internal_set.end();
@@ -76,7 +75,7 @@ bool Dictionary::is_empty()
     return this->size() == 0;
 }
 
-vector<string> Dictionary::get_suggestions(const string& word) const {
-	vector<string> suggestions;
+std::vector<std::string> Dictionary::get_suggestions(const std::string& word) const {
+    std::vector<std::string> suggestions;
 	return suggestions;
 }

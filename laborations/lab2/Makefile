@@ -44,7 +44,7 @@ include $(dir_make_utils)/suppression_makefile
 # Exercise creation and running.
 
 extxt = $(foreach exercise,${1},ex${exercise}.txt)
-exercises = $(call extxt, A1 A2)
+exercises = $(call extxt, A1 A2 A3)
 
 all: $(exercises) | setup
 
@@ -57,11 +57,18 @@ $(dir_txt)/exA1.txt: $(call execs,process_words) $(dir_output)/proc-words.txt
 		"output/proc-words.txt" > $@
 
 # test_A2 dependencies.
-$(call execs,test_A2) : $(call objs,dictionary.o)
+$(call execs,test_A2) : $(call objs,dictionary.o ngrams.o)
 
 $(dir_txt)/exA2.txt: $(call git,L02-A2,$(call execs,test_A2))
 	@echo_info "Creating $@."
 	@echo "Complete the Dictionary constructor." \
 		"output/proc-words.txt" > $@
+
+# test_A3_dependencies.
+$(call execs,test_A3): $(call objs,word.o ngrams.o test.o)
+
+$(dir_txt)/exA3.txt: $(call execs,test_A3)
+	@echo_info "Creating $@."
+	@echo "Complete Word constructor and test." > $@
 
 include $(dir_make_utils)/postamble_makefile
