@@ -1,7 +1,4 @@
-#include <iostream>
-#include <sstream>      // Stringstream.
-
-#include <assert.h>
+#include <string>
 
 #include "word.h"
 #include "test.h"
