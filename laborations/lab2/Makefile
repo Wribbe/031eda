@@ -66,9 +66,9 @@ $(dir_txt)/exA2.txt: $(call git,L02-A2,$(call execs,test_A2))
 		"output/proc-words.txt" > $@
 
 # test_A3_dependencies.
-$(call execs,test_A3): $(call git,L02-A3,$(call objs,word.o ngrams.o test.o))
+$(call execs,test_A3): $(call objs,word.o ngrams.o test.o)
 
-$(dir_txt)/exA3.txt: $(call execs,test_A3)
+$(dir_txt)/exA3.txt: $(call git,L02-A3,$(call execs,test_A3))
 	@echo_info "Creating $@."
 	@echo "Complete Word constructor and test." > $@
 
