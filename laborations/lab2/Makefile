@@ -49,6 +49,8 @@ exercises = $(call extxt, A1 A2 A3 A4)
 
 all: $(exercises) | setup
 
+$(dir_exec)/process_words: $(call objs, ngrams.o)
+
 $(dir_output)/proc-words.txt: $(dir_inputs)/words.txt $(dir_exec)/process_words
 	@$(dir_exec)/process_words $< > $@
 
@@ -73,7 +75,7 @@ $(dir_txt)/exA3.txt: $(call git,L02-A3,$(call execs,test_A3))
 	@echo "Complete Word constructor and test." > $@
 
 # test_A4_dependencies.
-$(call execs,test_A4): $(call objs,dictionary.o test.o)
+$(call execs,test_A4): $(call objs,word.o dictionary.o ngrams.o test.o)
 
 # test_A4_dependencies.
 $(dir_txt)/exA4.txt: $(call execs,test_A4)

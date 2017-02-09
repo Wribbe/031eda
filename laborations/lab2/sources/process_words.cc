@@ -6,45 +6,7 @@
 #include <sstream>      // stringstream.
 #include <vector>       // vector.
 
-std::vector<std::string> make_ngrams(std::string string, size_t ngram_size)
-    /* If the string is shorter or equal to ngram_size chars, return the
-     * string. If the string is longer then ngram_size chars, return a sorted
-     * vector of the n-grams. */
-{
-    std::vector<std::string> return_vector;
-    if (string.length() <= ngram_size) {
-        return_vector.push_back(string);
-        return return_vector;
-    }
-    for (size_t index=ngram_size-1; index<string.length(); ++index) {
-        return_vector.push_back(string.substr(index-(ngram_size-1), ngram_size));
-    }
-    // Sort the return vector.
-    std::sort(return_vector.begin(), return_vector.end());
-    // Return sorted vector.
-    return return_vector;
-}
-
-
-std::string make_output_string(std::string word,
-                               std::vector<std::string> ngrams)
-    /* Take a word and its n-gram vector and return a string that matches the
-     * desired output format. */
-{
-    std::stringstream buffer;
-    buffer << word << " ";
-    size_t num_ngrams = ngrams.size();
-    buffer << num_ngrams << " ";
-    for (size_t i = 0; i<num_ngrams; ++i) {
-        buffer << ngrams[i];
-        // Don't append after last ngram.
-        if (i < num_ngrams-1) {
-            buffer << " ";
-        }
-    }
-    return buffer.str();
-}
-
+#include "ngrams.h"
 
 int main(int argc, char * argv[])
     /* Process a input file at a given path by the command line arguments.

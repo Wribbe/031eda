@@ -56,6 +56,35 @@ std::vector<std::string> path_to_lines(const std::string& input_path)
     return return_vector;
 }
 
+void Dictionary::add_trigram_suggestions(std::vector<std::string>& suggestions,
+                                         const std::string& word_string) const
+    /* Only include stored words that have at least half the trigrams of the
+     * supplied word. */
+{
+    std::vector<std::string> input_trigrams = make_ngrams(word_string, 3);
+    size_t len_word = word_string.length();
+    if (len_word > max_word_length) {
+        return;
+    }
+    size_t min_len = len_word > 0 ? len_word-1 : len_word;
+    size_t max_len = len_word < max_word_length ? len_word+1 : len_word;
+
+    size_t num_trigrams = input_trigrams.size();
+    size_t half_trigrams = num_trigrams/2; // ex. 7 -> 3, err on smaller side.
+
+    /* Iterate over the interesting range. */
+    for (size_t index = min_len; index <= max_len; ++index) {
+        std::vector<Word> current_words = words[index];
+        for (Word word : current_words) {
+            std::vector<std::string> stored_trigrams = word.get_ngrams();
+            unsigned int matches = match_trigrams(stored_trigrams, input_trigrams);
+            if (matches >= half_trigrams) {
+                suggestions.push_back(word.get_word());
+            }
+        }
+    }
+}
+
 // Class functions.
 // ----------------
 
@@ -75,7 +104,13 @@ Dictionary::Dictionary(const std::vector<std::string>& input_strings) :
     input_path("")
     /* Iterate over supplied lines and append to internal set. */
 {
-    strings_to_internal_set(input_strings);
+    std::vector<std::string> processed_lines;
+    for (std::string input : input_strings) {
+        std::vector<std::string> trigrams = make_ngrams(input, 3);
+        std::string processed_string = make_output_string(input, trigrams);
+        processed_lines.push_back(processed_string);
+    }
+    strings_to_internal_set(processed_lines);
 }
 
 // Non constructor functions:
@@ -86,8 +121,14 @@ void Dictionary::strings_to_internal_set(std::vector<std::string> input_strings)
     for (std::string current_line : input_strings) {
         std::vector<std::string> current_tokens;
         current_tokens = split_string(current_line, delimiters);
-        std::string word = current_tokens[0];
-        this->internal_set.insert(word);
+        const std::string word_string = std::string(current_tokens[0]);
+        size_t len_word_string = word_string.length();
+        if (len_word_string > max_word_length) {
+            continue;
+        }
+        this->internal_set.insert(word_string);
+        Word word = Word(word_string);
+        this->words[len_word_string].push_back(word);
     }
 }
 
@@ -119,5 +160,6 @@ bool Dictionary::is_empty()
 
 std::vector<std::string> Dictionary::get_suggestions(const std::string& word) const {
     std::vector<std::string> suggestions;
+    add_trigram_suggestions(suggestions, word);
 	return suggestions;
 }
