@@ -65,23 +65,6 @@ soname = $(patsubst $(suffix $(1)),,$(1)) # Remove last .x part from libname.
 # git-tag/-branch.
 git = $(2)@$(1).git-revision
 
-# Suppress output from commands on the command line.
-ifeq ($(SUPPRESS_GIT_OUTPUT), $(True))
-supress_output = 1>/dev/null 2>&1
-else
-supress_output =
-endif
-
-# Functions that enable switching git-context.
-unstaged_changes = $(shell git status -s)
-ifdef unstaged_changes
-git_start = git stash $(supress_output) && git checkout $(1) $(supress_output) &&$(2)
-git_end = && git checkout $(supress_output) $(1) && git stash pop $(supress_output)
-else
-git_start = git checkout $(1) $(supress_output) &&$(2)
-git_end = && git checkout $(supress_output) $(1)
-endif
-
 # Variables.
 # ----------
 

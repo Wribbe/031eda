@@ -13,6 +13,16 @@ ifeq ($(OUTPUT_DYN_LIB), $(False))
 $(eval so_from_os = @$(value so_from_os))
 endif
 
+# Functions that enable switching git-context.
+unstaged_changes = $(if $(strip $(shell git status -s)),$(True),$(False))
+ifeq ($(unstaged_changes), $(True))
+git_start = git stash $(supress_output) && git checkout $(1) $(supress_output) &&$(2)
+git_end = && git checkout $(supress_output) $(1) && git stash pop $(supress_output)
+else
+git_start = git checkout $(1) $(supress_output) &&$(2)
+git_end = && git checkout $(supress_output) $(1)
+endif
+
 #commands = o_from_cc exec_from_o a_from_os exec_with_lib so_from_os
 commands = o_from_cc a_from_os so_from_os
 # Enable git-instruction targets if $(GIT_TARGETS) == $(True).
@@ -26,3 +36,11 @@ $(foreach command,$(commands),\
 endif
 endif
 endif
+
+# Suppress output from commands on the command line.
+ifeq ($(SUPPRESS_GIT_OUTPUT), $(True))
+supress_output = 1>/dev/null 2>&1
+else
+supress_output =
+endif
+
