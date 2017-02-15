@@ -45,7 +45,7 @@ include $(dir_make_utils)/suppression_makefile
 # Exercise creation and running.
 
 extxt = $(foreach exercise,${1},ex${exercise}.txt)
-exercises = $(call extxt, A1 A2)
+exercises = $(call extxt, A1 A2 A3)
 
 all: $(exercises) | setup
 
@@ -59,5 +59,11 @@ $(dir_txt)/exA1.txt: $(call execs,test_A1)
 $(dir_txt)/exA2.txt: $(call execs,string_sieve)
 	@echo_info "Creating $@."
 	@echo "Implement class TagRemover to remove HTML tags." > $@
+
+$(call execs,test_date): $(call objs,date.o)
+
+$(dir_txt)/exA3.txt: $(call execs,test_date)
+	@echo_info "Creating $@."
+	@echo "Implement date class." > $@
 
 include $(dir_make_utils)/postamble_makefile
