@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>      // stringstream.
 #include <vector>
+#include <utility>      // pair.
 
 #include "word.h"
 #include "dictionary.h"
@@ -165,35 +166,10 @@ std::vector<std::string> Dictionary::get_suggestions(const std::string& word) co
     return suggestions;
 }
 
-size_t Dictionary::edit_distance(const std::string& incorrect,
-                                 const std::string& correct) const
-    /* Calculate and return the edit distance required to make the incorrect
-     * word into the correct one. */
-{
-    // Set matrix.
-    size_t sort_matrix[max_word_length+1][max_word_length+1] = {0};
-    for (size_t i = 0; i < max_word_length; ++i) {
-        sort_matrix[0][i] = i;
-        sort_matrix[i][0] = i;
-    }
-
-    // Get maximal ranges.
-    size_t max_i = incorrect.size();
-    size_t max_j = correct.size();
-
-    // Iterate over the matrix and calculate distances.
-    for (size_t i = 0; i<max_i; ++i) {
-        for (size_t j = 0; j<max_j; ++j) {
-        }
-    }
-
-    return 0;
-}
-
-std::vector<std::string>
-Dictionary::rank_suggestions(const std::string& word,
-                             const std::vector<std::string>& suggestions) const
-    /* Sort candidates according to the following formula:
+size_t Dictionary::edit_distance(const std::string& word,
+                                 const std::string& suggestion) const
+    /* Calculate and return the edit distance required to transform the word
+     * into the suggestion according to the following formula:
      *
      *  cost d(i,j) for changing i chars in p to the first j chars in other
      *  word q equals:
@@ -207,6 +183,46 @@ Dictionary::rank_suggestions(const std::string& word,
      *  Use previous calculated values to step through then next 3 variables
      *  and see which one that results in the lowest cost. */
 {
-    size_t distance = edit_distance(word, suggestions[0]);
-    return {suggestions[0]};
+    // Set matrix.
+    size_t sort_matrix[max_word_length+1][max_word_length+1] = {0};
+    for (size_t i = 0; i < max_word_length; ++i) {
+        sort_matrix[0][i] = i;
+        sort_matrix[i][0] = i;
+    }
+
+    // Get maximal ranges.
+    size_t max_i = word.size();
+    size_t max_j = suggestion.size();
+
+    // Iterate over the matrix and calculate distances.
+    for (size_t i = 0; i<max_i; ++i) {
+        for (size_t j = 0; j<max_j; ++j) {
+        }
+    }
+
+    return 0;
+}
+
+std::vector<std::string>
+Dictionary::rank_suggestions(const std::string& word,
+                             const std::vector<std::string>& suggestions) const
+    /* Rank and return suggestions based on edit distance. */
+{
+    std::vector<std::pair<size_t, std::string>> sorting_vector;
+
+    for (const std::string& suggestion : suggestions) {
+        size_t distance = edit_distance(word, suggestion);
+        sorting_vector.push_back(std::make_pair(distance, suggestion));
+    }
+
+    // Sort sorting_vector.
+    std::sort(sorting_vector.begin(), sorting_vector.end());
+
+    // Go through and pull out all words.
+    std::vector<std::string> return_vector;
+    for (std::pair<size_t, std::string> pair : sorting_vector) {
+        return_vector.push_back(pair.second);
+    }
+
+    return return_vector;
 }

@@ -32,8 +32,8 @@ private:
     std::vector<std::string>
     rank_suggestions(const std::string& word,
                      const std::vector<std::string>& suggestions) const;
-    size_t edit_distance(const std::string& incorrect,
-                         const std::string& correct) const;
+    size_t edit_distance(const std::string& word,
+                         const std::string& suggestion) const;
 };
 
 #endif
