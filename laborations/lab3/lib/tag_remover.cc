@@ -40,7 +40,7 @@ void TagRemover::parse_string(const std::string& input)
     std::regex trailing_whitspace("[:space:]*\n*$");
     std::regex empty_lines("^[:space:]*\n*$");
 
-    /* Matching and replacing. */
+    /* Matching and replacing tags. */
     std::string current_string = input;
     current_string = std::regex_replace(current_string, newlines, "\\n");
     current_string = std::regex_replace(current_string, tags, "");
@@ -51,6 +51,17 @@ void TagRemover::parse_string(const std::string& input)
     current_string = std::regex_replace(current_string,
                                         trailing_whitspace,
                                         "");
+
+    /* Matching and replacing special characters. */
+    std::regex html_lt("&lt;");
+    std::regex html_gt("&gt;");
+    std::regex html_nbsp("&nbsp;");
+    std::regex html_amp("&amp;");
+
+    current_string = std::regex_replace(current_string, html_lt, "<");
+    current_string = std::regex_replace(current_string, html_gt, ">");
+    current_string = std::regex_replace(current_string, html_nbsp, " ");
+    current_string = std::regex_replace(current_string, html_amp, "&");
 
     string_buffer << current_string;
 

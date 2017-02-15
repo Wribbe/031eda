@@ -7,6 +7,7 @@
 int main(void)
 {
     print_test_header("TagRemover");
+    std::string compare;
 
     std::stringstream result_buffer;
     std::string result;
@@ -39,7 +40,15 @@ int main(void)
     file_data_test.print(result_buffer);
     result = result_buffer.str();
     std::stringstream().swap(result_buffer);
-    std::string compare = "Test Test";
+    compare = "Test Test";
+    test(compare.compare(result) == 0,
+         "Result: "+result+" should be: "+compare+" was: "+result);
+
+    TagRemover specials_test("&lt;&gt;&nbsp;&amp;");
+    compare = "<> &";
+    specials_test.print(result_buffer);
+    result = result_buffer.str();
+    std::stringstream().swap(result_buffer);
     test(compare.compare(result) == 0,
          "Result: "+result+" should be: "+compare+" was: "+result);
 
