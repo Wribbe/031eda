@@ -45,7 +45,7 @@ include $(dir_make_utils)/suppression_makefile
 # Exercise creation and running.
 
 extxt = $(foreach exercise,${1},ex${exercise}.txt)
-exercises = $(call extxt, A1)
+exercises = $(call extxt, A1 A2)
 
 all: $(exercises) | setup
 
@@ -54,7 +54,10 @@ $(call execs,test_A1) : $(call objs,test.o tag_remover.o)
 
 $(dir_txt)/exA1.txt: $(call execs,test_A1)
 	@echo_info "Creating $@."
-	@echo "Complete the Dictionary constructor." \
-		"output/proc-words.txt" > $@
+	@echo "Implement class TagRemover to remove HTML tags." > $@
+
+$(dir_txt)/exA2.txt: $(call execs,string_sieve)
+	@echo_info "Creating $@."
+	@echo "Implement class TagRemover to remove HTML tags." > $@
 
 include $(dir_make_utils)/postamble_makefile
