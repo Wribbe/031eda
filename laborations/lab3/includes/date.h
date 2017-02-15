@@ -13,7 +13,7 @@ private:
 	int year;  // the year (four digits)
 	int month; // the month (1-12)
 	int day;   // the day (1-..)
-    static const unsigned int num_months = 12;
+    static const int num_months = 12;
 	static int daysPerMonth[num_months]; // number of days in each month
 };
 

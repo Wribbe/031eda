@@ -60,9 +60,9 @@ $(dir_txt)/exA2.txt: $(call execs,string_sieve)
 	@echo_info "Creating $@."
 	@echo "Implement class TagRemover to remove HTML tags." > $@
 
-$(call execs,test_date): $(call objs,date.o)
+$(call execs,date_test): $(call objs,date.o)
 
-$(dir_txt)/exA3.txt: $(call execs,test_date)
+$(dir_txt)/exA3.txt: $(call execs,date_test)
 	@echo_info "Creating $@."
 	@echo "Implement date class." > $@
 

@@ -3,7 +3,10 @@
 
 int Date::daysPerMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-Date::Date() {
+/* Constructors. */
+Date::Date(void)
+    /* No input constructor. */
+{
 	time_t timer = time(0); // time in seconds since 1970-01-01
 	tm* locTime = localtime(&timer); // broken-down time
 	year = 1900 + locTime->tm_year;
@@ -11,20 +14,34 @@ Date::Date() {
 	day = locTime->tm_mday;
 }
 
-Date::Date(int y, int m, int d) {}
+Date::Date(int y, int m, int d)
+    /* Specified Date constructor. */
+{
+    year = y;
+    month = m;
+    day = d;
+}
 
 int Date::getYear() const {
-	return 0;
+	return year;
 }
 
 int Date::getMonth() const {
-	return 0;
+	return month;
 }
 
 int Date::getDay() const {
-	return 0;
+	return day;
 }
 
 void Date::next() {
+    day++;
+    if (day > daysPerMonth[month]) {
+        day = 1;
+        month++;
+    }
+    if (month > num_months) {
+        month = 1;
+        year++;
+    }
 }
-

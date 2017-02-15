@@ -16,7 +16,7 @@ void print(const Date& d) {
 }
 
 int main() {
-	// Check input and output of dates. Uncomment the following when you 
+	// Check input and output of dates. Uncomment the following when you
 	// have added operator>> and operator<<.
 	/*
 	bool cont = true;
@@ -37,7 +37,7 @@ int main() {
 		}
 	}
 	*/
-	
+
 	// Check 'next' by creating an object describing today's date, then
 	// printing dates more than a month ahead
 	cout << "--- Today and more than a month ahead:" << endl;
@@ -49,7 +49,7 @@ int main() {
 		print(d1);
 		cout << endl;
 	}
-	
+
 	// Check so 'next' functions correctly from one year to the next
 	cout << "--- New Year's Eve and the next day:" << endl;
 	Date d2(2013, 12, 31);
