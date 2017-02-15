@@ -116,3 +116,11 @@ helpers := $(echo_info) $(echo_warning)
 helper_paths := $(foreach name,$(helpers),$(dir_helpers)/$(name))
 # Add helpers to path.
 export PATH := $(shell pwd)/$(dir_helpers):$(PATH)
+# Link global lib folder libs to local lib folder.
+linked_libs := $(foreach path,$(wildcard ../lib/*.cc),$(patsubst ../%,%,$(path)))
+linked_headers := $(foreach path,$(wildcard ../includes/*.h),$(patsubst ../%,%,$(path)))
+
+# Phony targets.
+# --------------
+
+.PHONY: all setup remove clean re
