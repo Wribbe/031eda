@@ -61,6 +61,10 @@ get_dlibs = $(if $(strip $(call filter_so,$(1))),\
 
 soname = $(patsubst $(suffix $(1)),,$(1)) # Remove last .x part from libname.
 
+# Function for assigning that a prerequisite should be built at a specific
+# git-tag/-branch.
+git = $(2)@$(1).git-revision
+
 # Variables.
 # ----------
 
@@ -90,7 +94,7 @@ dirs_clean := $(dir_exec) $(dir_static_lib) $(dir_objects) $(dir_txt) \
 				$(dir_deps) $(dir_output) $(dir_dynamic_lib) \
 			   	$(dir_objects_fpic)
 dirs_remove := $(dirs_clean) $(dir_helpers)
-dirs_keep := $(dir_sources) $(dir_includes) $(dir_lib) $(dir_input)
+dirs_keep := $(dir_sources) $(dir_includes) $(dir_lib) $(dir_inputs)
 dirs_all := $(dirs_remove) $(dirs_keep)
 
 # Set vpaths (vpath is for source only):

@@ -6,7 +6,7 @@ $(dir_objects)/%.o : %.cc
 $(dir_objects_fpic)/%.o : %.cc
 	$(o_from_cc) -fPIC
 
-$(dir_exec)/% : $(dir_objects)/%.o | setup
+$(dir_exec)/% : $(dir_objects)/%.o
 	$(exec_from_o)
 
 $(dir_exec)/static_% : $(dir_objects)/%.o
@@ -24,6 +24,15 @@ $(dir_dynamic_lib)/% :
 			$(call strip_suffixes,$@).so)
 
 .SECONDARY: $(wildcard $(dir_dynamic_lib)/*)
+
+%.git-revision: # Invoke sub-make with set git-env parameters.
+	$(eval new_target_tokens := $(subst @, ,$*))
+	$(eval target := $(firstword $(new_target_tokens)))
+	$(eval revision := $(lastword $(new_target_tokens)))
+	$(eval MAIN_MAKE := $(firstword $(MAKEFILE_LIST)))
+	$(eval export GIT_CHANGE_TO = $(revision))
+	$(eval export GIT_CHANGE_FROM = $(shell git rev-parse --abbrev-ref HEAD))
+	$(MAKE) -f $(MAIN_MAKE) $(target)
 
 # Utility recipes:
 
@@ -75,3 +84,11 @@ $(helper_paths):
 # ------------------
 D_FILES := $(foreach source,$(CC_sources),$(dir_deps)/$(source:.cc=.d))
 -include $(D_FILES)
+
+# Unset git global vars if they are set.
+ifdef GIT_CHANGE_TO
+$(eval export GIT_CHANGE_TO = )
+endif
+ifdef GIT_CHANGE_FROM
+$(eval export GIT_CHANGE_FROM = )
+endif
