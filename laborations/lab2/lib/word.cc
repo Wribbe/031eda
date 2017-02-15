@@ -29,8 +29,8 @@ std::vector<std::string>& Word::get_ngrams(void)
 
 unsigned int Word::get_matches(const std::string& string) const
 {
-    std::vector<std::string> stored_trigrams = this->ngrams;
-    std::vector<std::string> input_trigrams = make_ngrams(string, 3);
+    const std::vector<std::string> stored_trigrams = this->ngrams;
+    const std::vector<std::string> input_trigrams = make_ngrams(string, 3);
 
     return match_trigrams(stored_trigrams, input_trigrams);
 }

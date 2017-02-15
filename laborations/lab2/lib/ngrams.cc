@@ -1,7 +1,7 @@
 #include <sstream>
 
 #include "ngrams.h"
-std::vector<std::string> make_ngrams(std::string string, size_t ngram_size)
+std::vector<std::string> make_ngrams(const std::string& string, size_t ngram_size)
     /* If the string is shorter or equal to ngram_size chars, return the
      * string. If the string is longer then ngram_size chars, return a sorted
      * vector of the n-grams. */
@@ -40,8 +40,8 @@ std::string make_output_string(std::string word,
 }
 
 
-bool advance(std::vector<std::string>::iterator& iterator,
-             std::vector<std::string>::iterator& end)
+bool advance(std::vector<std::string>::const_iterator& iterator,
+             std::vector<std::string>::const_iterator& end)
     /* Advance the iterator. If the iterator is at its end point, don't
      * advance. Return boolean value reflecting if the iterator has reached its
      * endpoint or not. */
@@ -53,16 +53,16 @@ bool advance(std::vector<std::string>::iterator& iterator,
 }
 
 
-unsigned int match_trigrams(std::vector<std::string> stored_trigrams,
-                            std::vector<std::string> input_trigrams)
+unsigned int match_trigrams(const std::vector<std::string>& stored_trigrams,
+                            const std::vector<std::string>& input_trigrams)
     /* Returns how many trigrams from the input that exist in the stored
      * trigram vector. Both vectors are alphabetically sorted. */
 {
-    auto iter_stored = stored_trigrams.begin();
-    auto iter_input = input_trigrams.begin();
+    auto iter_stored = stored_trigrams.cbegin();
+    auto iter_input = input_trigrams.cbegin();
 
-    auto iter_stored_end = stored_trigrams.end();
-    auto iter_input_end = input_trigrams.end();
+    auto iter_stored_end = stored_trigrams.cend();
+    auto iter_input_end = input_trigrams.cend();
 
     bool at_end_stored = iter_stored == iter_stored_end;
     bool at_end_input = iter_input == iter_input_end;
