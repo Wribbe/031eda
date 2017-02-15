@@ -30,7 +30,8 @@ private:
     void strings_to_internal_set(std::vector<std::string> input_strings);
     void add_trigram_suggestions(std::vector<std::string>& suggestions,
                                  const std::string& word) const;
-    void sort_candidates(std::vector<std::string> suggestions);
+    void rank_suggestions(std::string word,
+                          std::vector<std::string> suggestions);
 };
 
 #endif

@@ -163,3 +163,26 @@ std::vector<std::string> Dictionary::get_suggestions(const std::string& word) co
     add_trigram_suggestions(suggestions, word);
 	return suggestions;
 }
+
+void Dictionary::rank_suggestions(std::string word,
+                                  std::vector<std::string> suggestions)
+    /* Sort candidates according to the following formula:
+     *
+     *  cost d(i,j) for changing i chars in p to the first j chars in other
+     *  word q equals:
+     *
+     *      d(i,0) = i // first 'row/col' = 1,2,3 .. i.
+     *      d(0,j) = i // first 'row/col' = 1,2,3 .. j.
+     *      d(i,j) min( if p_i == q_j -> d(i-j,j-1) else d(i-1,j-1)+1,
+     *                  d(i-1, j) + 1,
+     *                  d(i, j-1) + 1.)
+     *
+     *  Use previous calculated values to step through then next 3 variables
+     *  and see which one that results in the lowest cost. */
+{
+    // Set up initial matrix.
+    for (size_t i = 0; i < max_word_length; ++i) {
+        this->sort_matrix[0][i] = i;
+        this->sort_matrix[i][0] = i;
+    }
+}
