@@ -161,11 +161,38 @@ bool Dictionary::is_empty()
 std::vector<std::string> Dictionary::get_suggestions(const std::string& word) const {
     std::vector<std::string> suggestions;
     add_trigram_suggestions(suggestions, word);
-	return suggestions;
+    suggestions = rank_suggestions(word, suggestions);
+    return suggestions;
 }
 
-void Dictionary::rank_suggestions(std::string word,
-                                  std::vector<std::string> suggestions)
+size_t Dictionary::edit_distance(const std::string& incorrect,
+                                 const std::string& correct) const
+    /* Calculate and return the edit distance required to make the incorrect
+     * word into the correct one. */
+{
+    // Set matrix.
+    size_t sort_matrix[max_word_length+1][max_word_length+1] = {0};
+    for (size_t i = 0; i < max_word_length; ++i) {
+        sort_matrix[0][i] = i;
+        sort_matrix[i][0] = i;
+    }
+
+    // Get maximal ranges.
+    size_t max_i = incorrect.size();
+    size_t max_j = correct.size();
+
+    // Iterate over the matrix and calculate distances.
+    for (size_t i = 0; i<max_i; ++i) {
+        for (size_t j = 0; j<max_j; ++j) {
+        }
+    }
+
+    return 0;
+}
+
+std::vector<std::string>
+Dictionary::rank_suggestions(const std::string& word,
+                             const std::vector<std::string>& suggestions) const
     /* Sort candidates according to the following formula:
      *
      *  cost d(i,j) for changing i chars in p to the first j chars in other
@@ -180,9 +207,6 @@ void Dictionary::rank_suggestions(std::string word,
      *  Use previous calculated values to step through then next 3 variables
      *  and see which one that results in the lowest cost. */
 {
-    // Set up initial matrix.
-    for (size_t i = 0; i < max_word_length; ++i) {
-        this->sort_matrix[0][i] = i;
-        this->sort_matrix[i][0] = i;
-    }
+    size_t distance = edit_distance(word, suggestions[0]);
+    return {suggestions[0]};
 }

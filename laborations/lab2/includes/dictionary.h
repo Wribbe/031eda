@@ -25,13 +25,15 @@ private:
     std::string input_path;
     static const size_t max_word_length = 25;
     std::vector<Word> words[max_word_length];
-    int sort_matrix[max_word_length+1][max_word_length+1];
     /* Functions. */
     void strings_to_internal_set(std::vector<std::string> input_strings);
     void add_trigram_suggestions(std::vector<std::string>& suggestions,
                                  const std::string& word) const;
-    void rank_suggestions(std::string word,
-                          std::vector<std::string> suggestions);
+    std::vector<std::string>
+    rank_suggestions(const std::string& word,
+                     const std::vector<std::string>& suggestions) const;
+    size_t edit_distance(const std::string& incorrect,
+                         const std::string& correct) const;
 };
 
 #endif

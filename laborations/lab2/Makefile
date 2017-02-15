@@ -45,7 +45,7 @@ include $(dir_make_utils)/suppression_makefile
 # Exercise creation and running.
 
 extxt = $(foreach exercise,${1},ex${exercise}.txt)
-exercises = $(call extxt, A1 A2 A3 A4)
+exercises = $(call extxt, A1 A2 A3 A4 A5)
 
 all: $(exercises) | setup
 
@@ -75,10 +75,18 @@ $(dir_txt)/exA3.txt: $(call git,L02-A3,$(call execs,test_A3))
 	@echo "Complete Word constructor and test." > $@
 
 # test_A4_dependencies.
-$(call execs,test_A4): $(call objs,word.o dictionary.o ngrams.o test.o)
+$(call execs,test_A4): $(call objs,ngrams.o word.o dictionary.o test.o)
 
 # test_A4_dependencies.
 $(dir_txt)/exA4.txt: $(call execs,test_A4)
+	@echo_info "Creating $@."
+	@echo "Expand Dictionary class and test." > $@
+
+# test_A5_dependencies.
+$(call execs,test_A5): $(call objs,ngrams.o word.o dictionary.o test.o)
+
+# test_A5_dependencies.
+$(dir_txt)/exA5.txt: $(call execs,test_A5)
 	@echo_info "Creating $@."
 	@echo "Expand Dictionary class and test." > $@
 
