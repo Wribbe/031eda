@@ -18,9 +18,12 @@ int main(void)
     test(suggestions[0].compare(correct) == 0,
          "First suggestion should be equal to <correct>.");
 
+    std::cout << "Returned suggestions:" << std::endl;
     for (std::string suggestion : suggestions) {
-        std::cout << suggestion << std::endl;
+        std::cout << "  " << suggestion << std::endl;
     }
+
+    test(suggestions.size() == 5, "Should return 5 suggestions.");
 
     print_test_results();
 }

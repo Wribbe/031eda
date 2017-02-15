@@ -163,6 +163,7 @@ std::vector<std::string> Dictionary::get_suggestions(const std::string& word) co
     std::vector<std::string> suggestions;
     add_trigram_suggestions(suggestions, word);
     suggestions = rank_suggestions(word, suggestions);
+    suggestions = trim_suggestions(suggestions);
     return suggestions;
 }
 
@@ -247,4 +248,13 @@ Dictionary::rank_suggestions(const std::string& word,
     }
 
     return return_vector;
+}
+
+std::vector<std::string>
+Dictionary::trim_suggestions(const std::vector<std::string>& suggestions) const
+    /* Return the 5 first suggestions. */
+{
+    size_t return_num = 5;
+    return std::vector<std::string>(suggestions.begin(),
+                                    suggestions.begin()+return_num);
 }
