@@ -2,6 +2,7 @@
 #define TAG_REMOVER_H
 
 #include <iostream>
+#include <regex>
 #include <sstream>
 #include <string>
 

@@ -17,16 +17,21 @@ TagRemover::TagRemover(const std::string& input)
 void TagRemover::print(std::ostream& cout)
     /* Print output to ostream. */
 {
-    cout << this->parse_results << std::endl;
+    cout << this->parse_results;
 }
 
 /* Private functions. */
+
 void TagRemover::parse_string(const std::string& input)
     /* Take a input string parse it and return parsed string. */
 {
     std::stringstream string_buffer;
-    for (char c : input) {
-        string_buffer << c;
-    }
+
+    /* Regular expressions. */
+    std::regex match_tags("<.*?>");
+
+    /* Matching and replacing. */
+    string_buffer << std::regex_replace(input, match_tags, "");
+
     this->parse_results = string_buffer.str();
 }
