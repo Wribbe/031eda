@@ -40,7 +40,7 @@ int main(void)
     file_data_test.print(result_buffer);
     result = result_buffer.str();
     std::stringstream().swap(result_buffer);
-    compare = "Test Test";
+    compare = "Test Test\n";
     test(compare.compare(result) == 0,
          "Result: "+result+" should be: "+compare+" was: "+result);
 
@@ -52,6 +52,9 @@ int main(void)
     test(compare.compare(result) == 0,
          "Result: "+result+" should be: "+compare+" was: "+result);
 
+    std::ifstream html_file("input/test.html");
+    TagRemover html_test(html_file);
+    html_test.print(std::cout);
 
     print_test_results();
 }
