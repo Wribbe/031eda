@@ -4,6 +4,12 @@
 TagRemover::TagRemover(std::istream& cin)
     /* Take data from cin, convert to string and parse. */
 {
+    std::stringstream buffer;
+    std::string line;
+    while (std::getline(cin, line)) {
+        buffer << line;
+    }
+    parse_string(buffer.str());
 }
 
 TagRemover::TagRemover(const std::string& input)
@@ -28,10 +34,25 @@ void TagRemover::parse_string(const std::string& input)
     std::stringstream string_buffer;
 
     /* Regular expressions. */
-    std::regex match_tags("<(.*?\n*?)+>");
+    std::regex newlines("\n");
+    std::regex escaped_newlines("\\n");
+    std::regex tags("<(.*?(\\n)*?)+>");
+    std::regex trailing_whitspace("[:space:]*\n*$");
+    std::regex empty_lines("^[:space:]*\n*$");
 
     /* Matching and replacing. */
-    string_buffer << std::regex_replace(input, match_tags, "");
+    std::string current_string = input;
+    current_string = std::regex_replace(current_string, newlines, "\\n");
+    current_string = std::regex_replace(current_string, tags, "");
+    current_string = std::regex_replace(current_string,
+                                        escaped_newlines,
+                                        "\n");
+    current_string = std::regex_replace(current_string, empty_lines, "");
+    current_string = std::regex_replace(current_string,
+                                        trailing_whitspace,
+                                        "");
+
+    string_buffer << current_string;
 
     this->parse_results = string_buffer.str();
 }

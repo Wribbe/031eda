@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 
 #include "test.h"
@@ -32,6 +33,15 @@ int main(void)
     std::stringstream().swap(result_buffer);
     test(input.compare(result) == 0,
          "Input: " + input + " should be unchanged, was: " + result);
+
+    std::ifstream file("input/test_A1_input.txt");
+    TagRemover file_data_test(file);
+    file_data_test.print(result_buffer);
+    result = result_buffer.str();
+    std::stringstream().swap(result_buffer);
+    std::string compare = "Test Test";
+    test(compare.compare(result) == 0,
+         "Result: "+result+" should be: "+compare+" was: "+result);
 
 
     print_test_results();
