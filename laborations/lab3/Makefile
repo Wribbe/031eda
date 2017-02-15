@@ -50,7 +50,7 @@ exercises = $(call extxt, A1)
 all: $(exercises) | setup
 
 # test_A1 dependencies.
-$(call execs,test_A1) : $(call objs,tag_remover.o)
+$(call execs,test_A1) : $(call objs,test.o tag_remover.o)
 
 $(dir_txt)/exA1.txt: $(call execs,test_A1)
 	@echo_info "Creating $@."
