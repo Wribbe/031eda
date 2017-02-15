@@ -254,6 +254,9 @@ std::vector<std::string>
 Dictionary::trim_suggestions(const std::vector<std::string>& suggestions) const
     /* Return the 5 first suggestions. */
 {
+    if (suggestions.size() == 0) {
+        return std::vector<std::string>();
+    }
     size_t return_num = 5;
     return std::vector<std::string>(suggestions.begin(),
                                     suggestions.begin()+return_num);

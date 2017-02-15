@@ -45,7 +45,7 @@ include $(dir_make_utils)/suppression_makefile
 # Exercise creation and running.
 
 extxt = $(foreach exercise,${1},ex${exercise}.txt)
-exercises = $(call extxt, A1 A2 A3 A4 A5)
+exercises = $(call extxt, A1 A2 A3 A4 A5 Final)
 
 all: $(exercises) | setup
 
@@ -89,5 +89,13 @@ $(call execs,test_A5): $(call objs,ngrams.o word.o dictionary.o test.o)
 $(dir_txt)/exA5.txt: $(call execs,test_A5)
 	@echo_info "Creating $@."
 	@echo "Expand Dictionary class and test." > $@
+
+# spell dependencies.
+$(call execs,spell): $(call objs,ngrams.o word.o dictionary.o)
+
+# test_Final_dependencies.
+$(dir_txt)/exFinal.txt: $(call execs,spell)
+	@echo_info "Creating $@."
+	@echo "Compiling and running the supplied test program." > $@
 
 include $(dir_make_utils)/postamble_makefile
