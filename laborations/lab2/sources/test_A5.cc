@@ -8,14 +8,19 @@ int main(void)
 {
     print_test_header("A5: Test rank_suggestions");
 
-    std::string input = "tatal";
+    std::string correct = "clown";
+    std::string error = "clownd";
 
-    Dictionary dict({input, "circus", "pivotal"});
+    Dictionary dict;
 
     std::vector<std::string> suggestions;
-    suggestions = dict.get_suggestions(input);
-    test(suggestions[0].compare(input) == 0,
-         "First suggestion should be equal to input.");
+    suggestions = dict.get_suggestions(error);
+    test(suggestions[0].compare(correct) == 0,
+         "First suggestion should be equal to <correct>.");
+
+    for (std::string suggestion : suggestions) {
+        std::cout << suggestion << std::endl;
+    }
 
     print_test_results();
 }

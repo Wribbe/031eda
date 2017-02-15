@@ -34,6 +34,7 @@ private:
                      const std::vector<std::string>& suggestions) const;
     size_t edit_distance(const std::string& word,
                          const std::string& suggestion) const;
+    size_t get_smallest(std::vector<size_t> values) const;
 };
 
 #endif

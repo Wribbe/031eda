@@ -166,6 +166,18 @@ std::vector<std::string> Dictionary::get_suggestions(const std::string& word) co
     return suggestions;
 }
 
+size_t Dictionary::get_smallest(std::vector<size_t> values) const
+    /* Iterate through values and return the smallest one. */
+{
+    size_t min = values[0];
+    for (size_t i=1; i<values.size(); ++i) {
+        if (values[i] < min) {
+            min = values[i];
+        }
+    }
+    return min;
+}
+
 size_t Dictionary::edit_distance(const std::string& word,
                                  const std::string& suggestion) const
     /* Calculate and return the edit distance required to transform the word
@@ -186,8 +198,8 @@ size_t Dictionary::edit_distance(const std::string& word,
     // Set matrix.
     size_t sort_matrix[max_word_length+1][max_word_length+1] = {0};
     for (size_t i = 0; i < max_word_length; ++i) {
-        sort_matrix[0][i] = i;
         sort_matrix[i][0] = i;
+        sort_matrix[0][i] = i;
     }
 
     // Get maximal ranges.
@@ -195,12 +207,22 @@ size_t Dictionary::edit_distance(const std::string& word,
     size_t max_j = suggestion.size();
 
     // Iterate over the matrix and calculate distances.
-    for (size_t i = 0; i<max_i; ++i) {
-        for (size_t j = 0; j<max_j; ++j) {
+    for (size_t i = 1; i<=max_i; ++i) {
+        char c_word = word[i-1];
+        for (size_t j = 1; j<=max_j; ++j) {
+            char c_suggestion = suggestion[j-1];
+            size_t prev_diag = sort_matrix[i-1][j-1];
+            // Calculate value based on equality and diag.
+            size_t val_eq = c_word == c_suggestion ? prev_diag : prev_diag+1;
+            // Calculate values based on previous i and j.
+            size_t val_prev_i = sort_matrix[i-1][j]+1;
+            size_t val_prev_j = sort_matrix[i][j-1]+1;
+            // Set the current value to the smallest value of the three.
+            sort_matrix[i][j] = get_smallest({val_eq, val_prev_i, val_prev_j});
         }
     }
 
-    return 0;
+    return sort_matrix[max_i][max_j];
 }
 
 std::vector<std::string>
