@@ -28,7 +28,7 @@ void TagRemover::parse_string(const std::string& input)
     std::stringstream string_buffer;
 
     /* Regular expressions. */
-    std::regex match_tags("<.*?>");
+    std::regex match_tags("<(.*?\n*?)+>");
 
     /* Matching and replacing. */
     string_buffer << std::regex_replace(input, match_tags, "");
