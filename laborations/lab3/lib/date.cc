@@ -45,13 +45,15 @@ void operator>>(std::string& input, Date& obj)
 }
 
 
-void operator<<(std::ostream& cout, const Date& obj)
+std::ostream& operator<<(std::ostream& cout, const Date& obj)
     /* Overload operator<< so that Date objects can be passed to output
      * streams. */
 {
     cout << std::setw(4) << std::setfill('0') << obj.getYear() << '-';
     cout << std::setw(2) << std::setfill('0') << obj.getMonth() << '-';
     cout << std::setw(2) << std::setfill('0') << obj.getDay();
+
+    return cout;
 }
 
 

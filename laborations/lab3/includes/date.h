@@ -33,5 +33,5 @@ private:
 /* Non-member operator-overloading. */
 std::istream& operator>>(std::istream& cin, Date& obj);
 void operator>>(std::string& input, Date& obj);
-void operator<<(std::ostream& cout, const Date& obj);
+std::ostream& operator<<(std::ostream& cout, const Date& obj);
 #endif
