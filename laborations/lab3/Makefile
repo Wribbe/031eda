@@ -45,7 +45,7 @@ include $(dir_make_utils)/suppression_makefile
 # Exercise creation and running.
 
 extxt = $(foreach exercise,${1},ex${exercise}.txt)
-exercises = $(call extxt, A1 A2 A3)
+exercises = $(call extxt, A1 A2 A3 A4)
 
 all: $(exercises) | setup
 
@@ -65,5 +65,11 @@ $(call execs,date_test): $(call objs,date.o)
 $(dir_txt)/exA3.txt: $(call execs,date_test)
 	@echo_info "Creating $@."
 	@echo "Implement date class." > $@
+
+$(call execs,test_to_string): $(call objs,to_string.o)
+
+$(dir_txt)/exA4.txt: $(call execs,test_to_string)
+	@echo_info "Creating $@."
+	@echo "Implement toString() function." > $@
 
 include $(dir_make_utils)/postamble_makefile
