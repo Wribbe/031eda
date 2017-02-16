@@ -1,6 +1,7 @@
 #ifndef DATE_H
 #define DATE_H
 
+#include <iomanip> // for setw and setfill
 #include <iostream>
 #include <regex>
 #include <string>
@@ -32,5 +33,5 @@ private:
 /* Non-member operator-overloading. */
 std::istream& operator>>(std::istream& cin, Date& obj);
 void operator>>(std::string& input, Date& obj);
-
+void operator<<(std::ostream& cout, const Date& obj);
 #endif

@@ -14,6 +14,7 @@ Date::Date(void)
 	day = locTime->tm_mday;
 }
 
+
 Date::Date(int y, int m, int d) :
     year(y),
     month(m),
@@ -24,13 +25,33 @@ Date::Date(int y, int m, int d) :
 
 
 std::istream& operator>>(std::istream& cin, Date& obj)
+    /* Overload operator>> with istream to make it possible to pipe input from
+     * cin to a date object. Set failbit if format was wrong. */
 {
-    std::cout << "Hello!" << std::endl;
+    std::string input;
+    std::getline(cin, input);
+    bool correct = obj.format_input(input);
+    if (!correct) {
+        cin.setstate(std::ios::failbit);
+    }
+    return cin;
 }
 
+
 void operator>>(std::string& input, Date& obj)
+    /* Overload operator>> for string input. */
 {
     obj.format_input(input);
+}
+
+
+void operator<<(std::ostream& cout, const Date& obj)
+    /* Overload operator<< so that Date objects can be passed to output
+     * streams. */
+{
+    cout << std::setw(4) << std::setfill('0') << obj.getYear() << '-';
+    cout << std::setw(2) << std::setfill('0') << obj.getMonth() << '-';
+    cout << std::setw(2) << std::setfill('0') << obj.getDay();
 }
 
 
