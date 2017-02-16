@@ -42,12 +42,30 @@ clean: # Remove most dirs, keep some.
 remove: # Thorough clean of all non-permanent files.
 	$(call remove_dirs,$(dirs_remove))
 
-setup: $(helper_paths) $(dirs_all) # Create helpers, and then dirs.
+# Create helpers, dirs and symlinks.
+setup: $(helper_paths) $(dirs_all) $(symlinks)
 
 $(dirs_all): # Create all directories.
 	$(call create_dirs,$(dirs_all))
 
 re: remove all # Re-generate from fresh slate.
+
+# Link global libraries to lib folder.
+$(linked_libs):
+	@# Link libs sources.
+	$(foreach file,$(linked_libs),\
+		$(shell ln -s $(abspath ../$(file)) $(abspath $(file))) \
+	)
+
+# Link global headers to include folder.
+$(linked_headers):
+	@# Link header files.
+	$(foreach file,$(linked_headers),\
+		$(shell ln -s $(abspath ../$(file)) $(abspath $(file))) \
+	)
+
+$(symlinks): $(linked_libs) $(linked_headers)
+
 
 # Creating and writing helper scripts.
 
@@ -74,11 +92,6 @@ $(helper_paths):
 	@# Make echo_warning executable.
 	@chmod a+x $(dir_helpers)/$(echo_warning)
 	@echo_info "Helper scripts created."
-
-# Phony targets.
-# --------------
-
-.PHONY: all setup remove clean re
 
 # *d-file inclusion.
 # ------------------
