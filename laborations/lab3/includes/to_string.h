@@ -6,6 +6,11 @@
 #include <string>
 
 template<typename T>
-std::string toString(T& input);
+std::string toString(const T& input)
+{
+    std::stringstream buffer;
+    buffer << input;
+    return buffer.str();
+}
 
 #endif

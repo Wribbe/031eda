@@ -3,8 +3,8 @@
 size_t counter = 0;
 size_t fails = 0;
 
-void test(bool assertion, std::string message)
-    /* Wrapper around assert, with optional message. */
+std::stringstream check_bool(bool assertion)
+    /* Break out counter. */
 {
     std::stringstream buffer;
     counter += 1;
@@ -14,9 +14,25 @@ void test(bool assertion, std::string message)
         buffer << "[!]: ";
         fails += 1;
     }
+    return buffer;
+}
+
+void test(bool assertion, std::string message)
+    /* Wrapper around assert, with optional message. */
+{
+    std::stringstream buffer = check_bool(assertion);
     if(message.length()) {
         buffer << message;
     }
+    buffer << std::endl;
+    std::cerr << buffer.str();
+}
+
+void test(bool assertion, std::string correct, std::string result)
+    /* A more pre-packaged variant of the test method. */
+{
+    std::stringstream buffer = check_bool(assertion);
+    buffer << "Result: Should be " << correct << " was: " << result << ".";
     buffer << std::endl;
     std::cerr << buffer.str();
 }

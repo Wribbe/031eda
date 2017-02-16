@@ -66,7 +66,7 @@ $(dir_txt)/exA3.txt: $(call execs,date_test)
 	@echo_info "Creating $@."
 	@echo "Implement date class." > $@
 
-$(call execs,test_to_string): $(call objs,to_string.o)
+$(call execs,test_to_string): $(call objs,test.o date.o)
 
 $(dir_txt)/exA4.txt: $(call execs,test_to_string)
 	@echo_info "Creating $@."
