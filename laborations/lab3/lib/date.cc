@@ -61,7 +61,7 @@ bool Date::format_input(std::string& input)
     /* Process input, return true or false signaling if the format was correct
      * or not. */
 {
-    std::regex re_year("^\\d{4}");
+    std::regex re_year("^\\d{4}\\d*-");
     std::regex re_month("-\\d{2}-");
     std::regex re_day("-\\d{2}$");
 
