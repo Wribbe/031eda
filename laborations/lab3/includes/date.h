@@ -25,7 +25,7 @@ private:
     int month; // the month (1-12)
     int day;   // the day (1-..)
     static const int num_months = 12;
-    static int daysPerMonth[num_months]; // number of days in each month
+    static int daysPerMonth[num_months+1]; // number of days in each month
     /* Private functions. */
     bool format_input(std::string& input);
 };

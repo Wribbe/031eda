@@ -1,7 +1,7 @@
 #include <ctime>  // time and localtime
 #include "date.h"
 
-int Date::daysPerMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int Date::daysPerMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 /* Constructors. */
 Date::Date(void)
