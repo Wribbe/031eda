@@ -22,6 +22,62 @@ Date::Date(int y, int m, int d) :
 {
 }
 
+
+std::istream& operator>>(std::istream& cin, Date& obj)
+{
+    std::cout << "Hello!" << std::endl;
+}
+
+void operator>>(std::string& input, Date& obj)
+{
+    obj.format_input(input);
+}
+
+
+bool Date::format_input(std::string& input)
+    /* Process input, return true or false signaling if the format was correct
+     * or not. */
+{
+    std::regex re_year("^\\d{4}");
+    std::regex re_month("-\\d{2}-");
+    std::regex re_day("-\\d{2}$");
+
+    std::regex dashes("-");
+
+    std::smatch string_match;
+    int counter = 0;
+    int tokens[3] = {0};
+    for(std::regex regex : {re_year, re_month, re_day}) {
+        std::regex_search(input, string_match, regex);
+        if (string_match.size() != 1) {
+            return false;
+        }
+        std::string match = string_match[0];
+        std::string stripped_match = std::regex_replace(match, dashes, "");
+        tokens[counter] = std::stoi(stripped_match);
+        if (tokens[counter] <= 0) {
+            return false;
+        }
+        counter++;
+    }
+
+    enum token_index { YEAR, MONTH, DAY };
+
+    if (tokens[MONTH] > num_months) {
+        return false;
+    }
+    if (tokens[DAY] > daysPerMonth[tokens[MONTH]]) {
+        return false;
+    }
+
+    year = tokens[YEAR];
+    month = tokens[MONTH];
+    day = tokens[DAY];
+
+    return true;
+}
+
+
 int Date::getYear() const {
 	return year;
 }

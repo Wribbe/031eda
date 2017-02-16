@@ -58,4 +58,9 @@ int main() {
 	d2.next();
 	print(d2);
 	cout << endl;
+
+    std::string input = "2017-01-23";
+    input >> d1;
+    print(d1);
+	cout << endl;
 }
