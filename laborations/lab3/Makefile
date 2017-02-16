@@ -72,6 +72,8 @@ $(dir_txt)/exA4.txt: $(call execs,test_to_string)
 	@echo_info "Creating $@."
 	@echo "Implement toString() function." > $@
 
+$(call execs,test_string_cast): $(call objs,test.o date.o)
+
 $(dir_txt)/exA5.txt: $(call execs,test_string_cast)
 	@echo_info "Creating $@."
 	@echo "Implement string_cast template function." > $@
