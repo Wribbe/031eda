@@ -99,19 +99,24 @@ bool Date::format_input(std::string& input)
 }
 
 
-int Date::getYear() const {
+int Date::getYear() const
+{
 	return year;
 }
 
-int Date::getMonth() const {
+int Date::getMonth() const
+{
 	return month;
 }
 
-int Date::getDay() const {
+int Date::getDay() const
+{
 	return day;
 }
 
-void Date::next() {
+void Date::next()
+    /* Step through to the next date. */
+{
     day++;
     if (day > daysPerMonth[month]) {
         day = 1;
