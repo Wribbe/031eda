@@ -49,12 +49,23 @@ exercises = $(call extxt, A1)
 
 all: $(exercises) | setup
 
-# test_A1 dependencies.
-$(call execs,test_A1) : $(call objs,test.o tag_remover.o)
+$(call execs,nstest nstime): $(call objs,vns.o mns.o umns.o hns.o)
 
-$(dir_txt)/exA1.txt: $(call execs,test_A1)
-	@echo_info "Creating $@."
-	@echo "Implement class TagRemover to remove HTML tags." > $@
+undescore := =======================
+
+generate_sh_runnner =\
+	rm -f $(2);\
+	echo "\#!/bin/sh" > $(2);\
+	$(foreach exec,$(1),(echo "echo [~] Running $(exec)." &&\
+						 echo "echo $(undescore)" &&\
+						 echo "$(exec) || echo "[!] FAILED: $(exec)" && exit"&&\
+						 echo "echo [~] $(exec) DONE."&&\
+						 echo "echo ")\
+						 >> $(2);)\
+	chmod +x $(2);\
+
+$(dir_txt)/exA1.txt: $(call execs,nstest nstime)
+	@$(call generate_sh_runnner,$^,$@)
 
 
 include $(dir_make_utils)/postamble_makefile
