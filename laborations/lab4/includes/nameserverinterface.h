@@ -5,11 +5,31 @@
 #ifndef NAME_SERVER_INTERFACE_H
 #define NAME_SERVER_INTERFACE_H
 
+#include <iterator>
+#include <iostream>
+#include <fstream>
 #include <string>
+#include <vector>
+#include <utility>
 
 using HostName = std::string;
 using IPAddress = unsigned int;
+using HostIPPair = std::pair<HostName, IPAddress>;
 const IPAddress NON_EXISTING_ADDRESS = 0;
+
+static const std::string data_path = "input/nameserverdata.txt";
+
+class Line {
+public:
+    friend std::istream& operator>>(std::istream &stream, Line &line);
+    operator std::string() const;
+    operator HostIPPair() const;
+private:
+    std::string data;
+};
+
+std::istream& operator>>(std::istream &stream, Line &line);
+std::istream_iterator<HostIPPair> data_iterator(void);
 
 class NameServerInterface {
 public:
@@ -35,5 +55,6 @@ public:
 	 */
 	virtual IPAddress lookup(const HostName&) const = 0;
 };
+
 
 #endif

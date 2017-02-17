@@ -49,7 +49,7 @@ exercises = $(call extxt, A1)
 
 all: $(exercises) | setup
 
-$(call execs,nstest nstime): $(call objs,vns.o mns.o umns.o hns.o)
+$(call execs,nstest nstime): $(call objs,vns.o mns.o umns.o hns.o nameserverinterface.o)
 
 undescore := =======================
 
