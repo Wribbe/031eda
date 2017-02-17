@@ -53,16 +53,17 @@ $(call execs,nstest nstime): $(call objs,vns.o mns.o umns.o hns.o)
 
 undescore := =======================
 
-generate_sh_runnner =\
-	rm -f $(2);\
-	echo "\#!/bin/sh" > $(2);\
+define generate_sh_runnner =
+	rm -f $(2)
+	echo "\#!/bin/sh" > $(2)
 	$(foreach exec,$(1),(echo "echo [~] Running $(exec)." &&\
 						 echo "echo $(undescore)" &&\
 						 echo "$(exec) || echo "[!] FAILED: $(exec)" && exit"&&\
 						 echo "echo [~] $(exec) DONE."&&\
 						 echo "echo ")\
-						 >> $(2);)\
-	chmod +x $(2);\
+						 >> $(2);)
+	chmod +x $(2)
+endef
 
 $(dir_txt)/exA1.txt: $(call execs,nstest nstime)
 	@$(call generate_sh_runnner,$^,$@)
