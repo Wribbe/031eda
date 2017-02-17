@@ -1,6 +1,6 @@
 #include "vns.h"
 
-VNS::VNS(void)
+VNS::VNS()
     /* Constructors: */
 {
 }
