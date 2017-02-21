@@ -16,6 +16,8 @@
 using HostName = std::string;
 using IPAddress = unsigned int;
 using HostIPPair = std::pair<HostName, IPAddress>;
+using HostIPPair_iter = std::vector<HostIPPair>::iterator;
+
 const IPAddress NON_EXISTING_ADDRESS = 0;
 
 static const std::string data_path = "input/nameserverdata.txt";
@@ -59,5 +61,7 @@ public:
 
 HostIPPair make_hostip_pair(const std::string& string);
 HostIPPair make_hostip_pair(const HostName& host, const IPAddress& address);
+IPAddress get_ip(HostIPPair_iter& iter);
+IPAddress get_ip(HostIPPair& pair);
 
 #endif

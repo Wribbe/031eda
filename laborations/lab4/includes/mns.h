@@ -2,12 +2,14 @@
 #define MNS_H
 
 #include "nameserverinterface.h"
+#include <map>
 
 class MNS : public NameServerInterface
 {
 public:
     /* Constructors: */
-    MNS(void);
+    MNS(std::vector<HostIPPair> vector_data);
+    MNS() : MNS(data_vector()) {};
 	/*
 	 * Insert a name/address pair. Does not check if the name
 	 * or address already exists.
@@ -28,6 +30,7 @@ public:
 	 */
 	IPAddress lookup(const HostName&) const;
 private:
+    mutable std::map<HostName, IPAddress> database;
 };
 
 #endif

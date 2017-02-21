@@ -3,8 +3,6 @@
 
 #include "nameserverinterface.h"
 
-using lookup_iter = std::vector<HostIPPair>::iterator;
-
 class VNS : public NameServerInterface
 {
 public:
@@ -31,7 +29,7 @@ public:
 	IPAddress lookup(const HostName&) const;
 private:
     mutable std::vector<HostIPPair> database;
-    lookup_iter get_lookup_iter(const HostName& host) const;
+    HostIPPair_iter get_HostIPPair_iter(const HostName& host) const;
 };
 
 #endif

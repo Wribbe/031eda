@@ -55,3 +55,14 @@ HostIPPair make_hostip_pair(const HostName& host, const IPAddress& address)
     return std::make_pair(host, address);
 }
 
+IPAddress get_ip(HostIPPair& pair)
+    /* Take pair and return IPAddress. */
+{
+    return pair.second;
+}
+
+IPAddress get_ip(HostIPPair_iter& iter)
+    /* Take iterator and return IPAddress. */
+{
+    return get_ip(*iter);
+}
