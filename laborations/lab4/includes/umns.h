@@ -1,13 +1,16 @@
 #ifndef UMNS_H
 #define UMNS_H
 
+#include <unordered_map>
+
 #include "nameserverinterface.h"
 
 class UMNS : public NameServerInterface
 {
 public:
     /* Constructors: */
-    UMNS(void);
+    UMNS(std::vector<HostIPPair> vector_data);
+    UMNS() : UMNS(data_vector()) {};
 	/*
 	 * Insert a name/address pair. Does not check if the name
 	 * or address already exists.
@@ -28,6 +31,7 @@ public:
 	 */
 	IPAddress lookup(const HostName&) const;
 private:
+    mutable std::unordered_map<HostName, IPAddress> database;
 };
 
 #endif
