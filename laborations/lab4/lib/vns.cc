@@ -1,13 +1,14 @@
 #include "vns.h"
 
-VNS::VNS()
+VNS::VNS() :
     /* Constructors: */
+    database(data_vector())
 {
+    /* Empty body. */
 }
 
 void VNS::insert(const HostName& host, const IPAddress& address)
 {
-    std::istream_iterator<HostIPPair> iter = data_iterator();
 }
 
 bool VNS::remove(const HostName& host)

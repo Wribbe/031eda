@@ -28,6 +28,7 @@ public:
 	 */
 	IPAddress lookup(const HostName&) const;
 private:
+    std::vector<HostIPPair> database;
 };
 
 #endif

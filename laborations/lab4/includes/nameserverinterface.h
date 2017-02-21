@@ -29,7 +29,7 @@ private:
 };
 
 std::istream& operator>>(std::istream &stream, Line &line);
-std::istream_iterator<HostIPPair> data_iterator(void);
+std::vector<HostIPPair> data_vector(void);
 
 class NameServerInterface {
 public:
@@ -56,5 +56,7 @@ public:
 	virtual IPAddress lookup(const HostName&) const = 0;
 };
 
+HostIPPair make_hostip_pair(const std::string& string);
+HostIPPair make_hostip_pair(const HostName& host, const IPAddress& address);
 
 #endif

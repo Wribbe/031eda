@@ -17,10 +17,10 @@ Line::operator std::string() const
 Line::operator HostIPPair() const
     /* Specify how a Line object is implicitly converted to a HostIPPair. */
 {
-    return std::make_pair("test", 123);
+    return make_hostip_pair(data);
 }
 
-std::istream_iterator<std::pair<HostName, IPAddress>> data_iterator(void)
+std::vector<HostIPPair> data_vector(void)
     /* Return iterator over all lines in the data as pairs. */
 {
     std::ifstream file(data_path);
@@ -36,9 +36,22 @@ std::istream_iterator<std::pair<HostName, IPAddress>> data_iterator(void)
 
     std::vector<HostIPPair> return_vector;
     std::copy(iter, end, back_inserter(return_vector));
-    for (HostIPPair pair : return_vector) {
-        std::cout << pair.first << ":" << pair.second << std::endl;
-    }
 
-    return std::istream_iterator<std::pair<HostName, IPAddress>>();
+    return return_vector;
 }
+
+HostIPPair make_hostip_pair(const std::string& string)
+    /* Method for making a HostIPPair from space separated string. */
+{
+    size_t space_index = string.find(" ");
+    std::string hostName(string, 0, space_index-1);
+    unsigned int ipNumber = std::stoul(std::string(string, space_index+1));
+    return std::make_pair(hostName, ipNumber);
+}
+
+HostIPPair make_hostip_pair(const HostName& host, const IPAddress& address)
+    /* Method for making a HostIPPair from separate values. */
+{
+    return std::make_pair(host, address);
+}
+
