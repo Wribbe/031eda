@@ -20,7 +20,7 @@ Line::operator HostIPPair() const
     return make_hostip_pair(data);
 }
 
-std::vector<HostIPPair> data_vector(void)
+std::vector<HostIPPair> data_vector()
     /* Return iterator over all lines in the data as pairs. */
 {
     std::ifstream file(data_path);

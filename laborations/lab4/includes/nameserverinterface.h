@@ -5,6 +5,7 @@
 #ifndef NAME_SERVER_INTERFACE_H
 #define NAME_SERVER_INTERFACE_H
 
+#include <algorithm>
 #include <iterator>
 #include <iostream>
 #include <fstream>
@@ -29,7 +30,7 @@ private:
 };
 
 std::istream& operator>>(std::istream &stream, Line &line);
-std::vector<HostIPPair> data_vector(void);
+std::vector<HostIPPair> data_vector();
 
 class NameServerInterface {
 public:
