@@ -3,11 +3,14 @@
 
 #include "nameserverinterface.h"
 
+using pairVector = std::vector<HostIPPair>;
+using hashMap = std::vector<pairVector>;
+
 class HNS : public NameServerInterface
 {
 public:
-    HNS(void);
-    HNS(int);
+    HNS(int table_size);
+    HNS();
     /* Constructors: */
 	/*
 	 * Insert a name/address pair. Does not check if the name
@@ -29,6 +32,12 @@ public:
 	 */
 	IPAddress lookup(const HostName&) const;
 private:
+    int default_size = 4500;
+    size_t table_size;
+    mutable hashMap database;
+    std::hash<HostName> hash_host;
+    size_t get_index(const HostName& host) const;
+    HostIPPair_iter get_HostIPPair_iter(const HostName& host) const;
 };
 
 #endif
