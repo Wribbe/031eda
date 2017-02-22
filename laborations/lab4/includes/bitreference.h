@@ -13,19 +13,22 @@
 class BitReference {
 	// friend class BitsetIterator;
 public:
-	BitReference(Bitset::BitStorage* pb, std::size_t p)
-	    : p_bits(pb), pos(p) {}
-	
+    /* Constructors. */
+
+	BitReference(Bitset::BitStorage * pb, std::size_t p);
+
+    /* Public methods. */
+
 	/*
 	 * This operator= is used for bs[i] = b.
 	 */
 	BitReference& operator=(bool b);
-	
+
 	/*
 	 * This operator= is used for bs[i] = bs[j].
 	 */
 	BitReference& operator=(const BitReference& rhs);
-	
+
 	/*
 	 * Operator bool() is used for b = bs[i].
 	 */

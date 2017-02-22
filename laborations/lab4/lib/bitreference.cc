@@ -1,5 +1,13 @@
 #include "bitreference.h"
 #include "bitset.h"
+/* Constructors: */
+
+BitReference::BitReference(Bitset::BitStorage * pb, size_t p) :
+    p_bits(pb),
+    pos(p)
+{
+    /* Empty constructor. */
+}
 
 BitReference& BitReference::operator=(bool b) {
 	//
