@@ -37,7 +37,8 @@ private:
     mutable hashMap database;
     std::hash<HostName> hash_host;
     size_t get_index(const HostName& host) const;
-    HostIPPair_iter get_HostIPPair_iter(const HostName& host) const;
+    HostIPPair_iter get_HostIPPair_iter(const HostName& host,
+                                        size_t index) const;
 };
 
 #endif

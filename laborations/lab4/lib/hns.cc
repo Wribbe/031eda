@@ -24,7 +24,7 @@ void HNS::insert(const HostName& host, const IPAddress& address)
 bool HNS::remove(const HostName& host)
 {
     size_t index = get_index(host);
-    HostIPPair_iter it = get_HostIPPair_iter(host);
+    HostIPPair_iter it = get_HostIPPair_iter(host, index);
     bool found = it != database[index].end();
     if (found) {
         database[index].erase(it);
@@ -32,10 +32,10 @@ bool HNS::remove(const HostName& host)
     return found;
 }
 
-HostIPPair_iter HNS::get_HostIPPair_iter(const HostName& host) const
+HostIPPair_iter HNS::get_HostIPPair_iter(const HostName& host,
+                                         size_t index) const
     /* Return find_if iterator based on host. */
 {
-    size_t index = get_index(host);
     auto cmp_lambda = [&host](HostIPPair stored)mutable ->bool {
         return host.compare(stored.first) == 0;
     };
@@ -49,7 +49,7 @@ IPAddress HNS::lookup(const HostName& host) const
     /* Look up and return host IP address if present. */
 {
     size_t index = get_index(host);
-    HostIPPair_iter it = get_HostIPPair_iter(host);
+    HostIPPair_iter it = get_HostIPPair_iter(host, index);
     if (it == database[index].end()) {
         return NON_EXISTING_ADDRESS;
     }
