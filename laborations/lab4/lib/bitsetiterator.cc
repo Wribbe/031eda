@@ -6,15 +6,32 @@ BitsetIterator::BitsetIterator(Bitset::BitStorage * pb, std::size_t p) :
     /* Empty constructor. */
 }
 
-bool BitsetIterator::operator!=(const BitsetIterator& bsi) const {
-    return true;
+bool BitsetIterator::operator!=(const BitsetIterator& bsi) const
+    /* Method for determining if one BitsetIterator is non-equal to another
+     * BitsetIterator. */
+{
+    if (ref.p_bits != bsi.ref.p_bits) {
+        return true;
+    }
+    if (ref.pos != bsi.ref.pos) {
+        return true;
+    }
+    return false;
 }
 
-BitsetIterator& BitsetIterator::operator++() {
+BitsetIterator& BitsetIterator::operator++()
+    /* Increment ref.pos as long as it does not exceed the digit count of the
+     * BitStorage type. */
+{
+    if (ref.pos < Bitset().BPW) {
+        ref.pos++;
+    }
     return *this;
 }
 
-BitReference BitsetIterator::operator*() {
+BitReference BitsetIterator::operator*()
+    /* Defines what should be returned when the iterator is dereferenced. */
+{
     return ref;
 }
 
