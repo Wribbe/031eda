@@ -45,7 +45,7 @@ include $(dir_make_utils)/suppression_makefile
 # Exercise creation and running.
 
 extxt = $(foreach exercise,${1},ex${exercise}.txt)
-exercises = $(call extxt, A1)
+exercises = $(call extxt, A1 A3)
 
 all: $(exercises) | setup
 
@@ -66,6 +66,11 @@ define generate_sh_runnner =
 endef
 
 $(dir_txt)/exA1.txt: $(call execs,nstest nstime)
+	@$(call generate_sh_runnner,$^,$@)
+
+$(call execs,simplebitsettest) : $(call objs,simplebitset.o)
+
+$(dir_txt)/exA3.txt: $(call execs,simplebitsettest)
 	@$(call generate_sh_runnner,$^,$@)
 
 
