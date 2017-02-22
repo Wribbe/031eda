@@ -12,7 +12,7 @@
 class BitsetIterator : public std::iterator<std::forward_iterator_tag, bool> {
 public:
     /* Constructors: */
-    BitsetIterator(unsigned long * pb, std::size_t p);
+    BitsetIterator(Bitset::BitStorage * pb, std::size_t p);
     /* Member methods. */
     bool operator!=(const BitsetIterator& bsi) const;
     BitsetIterator& operator++();

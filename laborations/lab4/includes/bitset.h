@@ -10,7 +10,8 @@
 #include <cstddef> /* size_t */
 #include <limits>  /* numeric_limits */
 
-#include "bitsetiterator.h"
+class BitReference;
+class BitsetIterator;
 
 class Bitset {
     friend class BitReference;
