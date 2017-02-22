@@ -11,15 +11,15 @@
 
 class SimpleBitset {
 public:
-	SimpleBitset();
-	std::size_t size() const;
-	bool get(std::size_t pos) const;
-	void set(std::size_t pos, bool b);
+    SimpleBitset();
+    std::size_t size() const;
+    bool get(std::size_t pos) const;
+    void set(std::size_t pos, bool b);
 private:
-	using BitStorage = unsigned long;
-	BitStorage bits;
-	static const std::size_t
-	    BPW = std::numeric_limits<BitStorage>::digits;
+    using BitStorage = unsigned long;
+    BitStorage bits;
+    static const std::size_t
+        BPW = std::numeric_limits<BitStorage>::digits;
 };
 
 #endif

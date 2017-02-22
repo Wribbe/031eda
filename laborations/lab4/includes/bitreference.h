@@ -11,31 +11,31 @@
 #include <cstddef>
 
 class BitReference {
-	// friend class BitsetIterator;
+    // friend class BitsetIterator;
 public:
     /* Constructors. */
 
-	BitReference(Bitset::BitStorage * pb, std::size_t p);
+    BitReference(Bitset::BitStorage * pb, std::size_t p);
 
     /* Public methods. */
 
-	/*
-	 * This operator= is used for bs[i] = b.
-	 */
-	BitReference& operator=(bool b);
+    /*
+     * This operator= is used for bs[i] = b.
+     */
+    BitReference& operator=(bool b);
 
-	/*
-	 * This operator= is used for bs[i] = bs[j].
-	 */
-	BitReference& operator=(const BitReference& rhs);
+    /*
+     * This operator= is used for bs[i] = bs[j].
+     */
+    BitReference& operator=(const BitReference& rhs);
 
-	/*
-	 * Operator bool() is used for b = bs[i].
-	 */
-	operator bool() const;
+    /*
+     * Operator bool() is used for b = bs[i].
+     */
+    operator bool() const;
 private:
-	Bitset::BitStorage* p_bits; // pointer to the word containing bits
-	std::size_t pos;            // position of the bit in the word
+    Bitset::BitStorage* p_bits; // pointer to the word containing bits
+    std::size_t pos;            // position of the bit in the word
 };
 
 #endif

@@ -14,22 +14,22 @@ class BitReference;
 // class BitsetIterator;
 
 class Bitset {
-	friend class BitReference;
-	// friend class BitsetIterator;
+    friend class BitReference;
+    // friend class BitsetIterator;
 public:
-	Bitset();
-	std::size_t size() const;
-	bool operator[](std::size_t pos) const;
-	BitReference operator[](std::size_t pos);
+    Bitset();
+    std::size_t size() const;
+    bool operator[](std::size_t pos) const;
+    BitReference operator[](std::size_t pos);
 
-	/*
-	using iterator = BitsetIterator;
-	iterator begin();
-	iterator end();
-	 */
+    /*
+    using iterator = BitsetIterator;
+    iterator begin();
+    iterator end();
+     */
 private:
-	using BitStorage = unsigned long;
-	BitStorage bits;
+    using BitStorage = unsigned long;
+    BitStorage bits;
     static const std::size_t BPW = std::numeric_limits<BitStorage>::digits;
 };
 
