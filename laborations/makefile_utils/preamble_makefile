@@ -89,10 +89,11 @@ dir_output := output
 dir_static_lib := $(dir_exec)/static_libs
 dir_dynamic_lib := $(dir_exec)/dynamic_libs
 dir_objects_fpic := $(dir_objects)/fPIC
+dir_sh := runscripts
 # Directory groupings:
 dirs_clean := $(dir_exec) $(dir_static_lib) $(dir_objects) $(dir_txt) \
 				$(dir_deps) $(dir_output) $(dir_dynamic_lib) \
-			   	$(dir_objects_fpic)
+				$(dir_objects_fpic) $(dir_sh)
 dirs_remove := $(dirs_clean) $(dir_helpers)
 dirs_keep := $(dir_sources) $(dir_includes) $(dir_lib) $(dir_inputs)
 dirs_all := $(dirs_remove) $(dirs_keep)
@@ -100,7 +101,6 @@ dirs_all := $(dirs_remove) $(dirs_keep)
 # Set vpaths (vpath is for source only):
 vpath %.cc $(dir_sources)
 vpath %.cc $(dir_lib)
-vpath %.txt $(dir_txt)
 vpath %.d $(dir_deps)
 
 # File_lists:

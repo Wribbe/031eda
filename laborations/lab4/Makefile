@@ -44,12 +44,10 @@ include $(dir_make_utils)/suppression_makefile
 
 # Exercise creation and running.
 
-extxt = $(foreach exercise,${1},ex${exercise}.txt)
-exercises = $(call extxt, A1 A3 A4 A5)
+exsh = $(foreach exercise,${1},$(dir_sh)/${exercise}.sh)
+exercises = $(call exsh, A1 A3 A4 A5)
 
-all: $(exercises) | setup
-
-$(call execs,nstest nstime): $(call objs,vns.o mns.o umns.o hns.o nameserverinterface.o)
+all: $(exercises) $(call exsh,ALL) | setup
 
 undescore := =======================
 
@@ -65,24 +63,26 @@ define generate_sh_runnner =
 	chmod +x $(2)
 endef
 
-
-$(dir_txt)/exA1.txt: $(call execs,nstest nstime)
+$(call execs,nstest nstime): $(call objs,vns.o mns.o umns.o hns.o nameserverinterface.o)
+$(dir_sh)/A1.sh: $(call execs,nstest nstime)
 	@$(call generate_sh_runnner,$^,$@)
 
 
 $(call execs,simplebitsettest) : $(call objs,simplebitset.o)
-$(dir_txt)/exA3.txt: $(call execs,simplebitsettest)
+$(dir_sh)/A3.sh: $(call execs,simplebitsettest)
 	@$(call generate_sh_runnner,$^,$@)
 
 
 $(call execs,bitsettest1) : $(call objs,bitset.o bitreference.o bitsetiterator.o)
-$(dir_txt)/exA4.txt: $(call execs,bitsettest1)
+$(dir_sh)/A4.sh: $(call execs,bitsettest1)
 	@$(call generate_sh_runnner,$^,$@)
 
 
 $(call execs,bitsettest2) : $(call objs,bitset.o bitreference.o bitsetiterator.o)
-$(dir_txt)/exA5.txt: $(call execs,bitsettest2)
+$(dir_sh)/A5.sh: $(call execs,bitsettest2)
 	@$(call generate_sh_runnner,$^,$@)
 
+$(dir_sh)/ALL.sh : $(exercises)
+	@$(call generate_sh_runnner,$^,$@)
 
 include $(dir_make_utils)/postamble_makefile
