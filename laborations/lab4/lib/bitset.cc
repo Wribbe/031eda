@@ -1,6 +1,6 @@
 #include "bitset.h"
 #include "bitreference.h"
-// #include "bitsetiterator.h"
+#include "bitsetiterator.h"
 
 Bitset::Bitset() : bits(0) {}
 
