@@ -44,8 +44,10 @@ HostIPPair make_hostip_pair(const std::string& string)
     /* Method for making a HostIPPair from space separated string. */
 {
     size_t space_index = string.find(" ");
-    std::string hostName(string, 0, space_index-1);
-    unsigned int ipNumber = std::stoul(std::string(string, space_index+1));
+    std::string hostName(string, 0, space_index);
+    std::string ip_substring = std::string(string, space_index+1,
+                                           string.length());
+    unsigned int ipNumber = std::stoul(ip_substring);
     return std::make_pair(hostName, ipNumber);
 }
 
