@@ -75,12 +75,12 @@ $(dir_txt)/exA3.txt: $(call execs,simplebitsettest)
 	@$(call generate_sh_runnner,$^,$@)
 
 
-$(call execs,bitsettest1) : $(call objs,bitset.o bitreference.o)
+$(call execs,bitsettest1) : $(call objs,bitset.o bitreference.o bitsetiterator.o)
 $(dir_txt)/exA4.txt: $(call execs,bitsettest1)
 	@$(call generate_sh_runnner,$^,$@)
 
 
-$(call execs,bitsettest2) : $(call objs,bitset.o bitreference.o)
+$(call execs,bitsettest2) : $(call objs,bitset.o bitreference.o bitsetiterator.o)
 $(dir_txt)/exA5.txt: $(call execs,bitsettest2)
 	@$(call generate_sh_runnner,$^,$@)
 
