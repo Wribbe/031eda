@@ -10,19 +10,18 @@
 #include <cstddef> /* size_t */
 #include <limits>  /* numeric_limits */
 
-class BitReference;
-class BitsetIterator;
+#include "bitsetiterator.h"
 
 class Bitset {
     friend class BitReference;
     friend class BitsetIterator;
 public:
+    using iterator = BitsetIterator;
     Bitset();
     std::size_t size() const;
     bool operator[](std::size_t pos) const;
     BitReference operator[](std::size_t pos);
 
-    using iterator = BitsetIterator;
     iterator begin();
     iterator end();
 private:

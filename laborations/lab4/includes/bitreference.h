@@ -7,16 +7,14 @@
 #ifndef BITSET_REFERENCE_H
 #define BITSET_REFERENCE_H
 
-#include "bitset.h"
 #include <cstddef>
 
 class BitReference {
     friend class BitsetIterator;
 public:
-
     /* Constructors. */
 
-    BitReference(Bitset::BitStorage * pb, std::size_t p);
+    BitReference(unsigned long * pb, std::size_t p);
 
     /* Public methods. */
 
@@ -28,10 +26,9 @@ public:
 
     // Operator bool() is used for b = bs[i].
     operator bool() const;
-
 private:
-    Bitset::BitStorage * p_bits;    // Pointer to the word containing bits.
-    std::size_t pos;                // Position of the bit in the word.
+    unsigned long * p_bits;    // Pointer to the word containing bits.
+    std::size_t pos;           // Position of the bit in the word.
     BitReference& generic_setter(size_t pos, bool b);
 };
 
