@@ -16,12 +16,12 @@ BitReference Bitset::operator[](size_t pos) {
     return BitReference(&bits, pos);
 }
 
-/*
-Bitset::iterator Bitset::begin() {
-    ...
+Bitset::iterator Bitset::begin()
+{
+    return iterator(bits, 0);
 }
 
-Bitset::iterator Bitset::end() {
-    ...
+Bitset::iterator Bitset::end()
+{
+    return iterator(bits, BPW);
 }
-*/
