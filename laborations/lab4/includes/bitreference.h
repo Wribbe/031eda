@@ -32,6 +32,7 @@ public:
 private:
     Bitset::BitStorage * p_bits;    // Pointer to the word containing bits.
     std::size_t pos;                // Position of the bit in the word.
+    BitReference& generic_setter(size_t pos, bool b);
 };
 
 #endif
