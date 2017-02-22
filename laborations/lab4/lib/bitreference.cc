@@ -26,9 +26,5 @@ BitReference& BitReference::operator=(const BitReference& rhs) {
 }
 
 BitReference::operator bool() const {
-    //
-    // *** IMPLEMENT ***
-    // This corresponds to the get() function in SimpleBitset.
-    //
-    return true;
+    return (*p_bits & (1uL << pos)) != 0;
 }
