@@ -58,7 +58,7 @@ define generate_sh_runnner =
 	echo "#!/bin/sh" > $(2)
 	$(foreach exec,$(1),(echo "echo [~] Running $(exec)." &&\
 						 echo "echo $(undescore)" &&\
-						 echo "$(exec) || echo "[!] FAILED: $(exec)" && exit"&&\
+						 echo "$(exec) || (echo "[!] FAILED: $(exec)" && exit)"&&\
 						 echo "echo [~] $(exec) DONE."&&\
 						 echo "echo ")\
 						 >> $(2);)
