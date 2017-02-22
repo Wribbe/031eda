@@ -99,8 +99,8 @@ int main() {
 	 * measureTime() function.
 	 */
 	vector<dns_record> data;
-	
-	ifstream in("nameserverdata.txt");
+
+	ifstream in("input/nameserverdata.txt");
 	if (!in) {
 		cerr << "Could not open data file (nameserverdata.txt)" << endl;
 		exit(1);
