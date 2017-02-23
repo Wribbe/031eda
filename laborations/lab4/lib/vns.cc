@@ -26,7 +26,7 @@ bool VNS::remove(const HostName& host)
 HostIPPair_iter VNS::get_HostIPPair_iter(const HostName& host) const
     /* Return find_if iterator based on host. */
 {
-    auto cmp_lambda = [&host](HostIPPair stored)mutable ->bool {
+    auto cmp_lambda = [&host](HostIPPair& stored)mutable ->bool {
         return host.compare(stored.first) == 0;
     };
     HostIPPair_iter it = std::find_if(database.begin(), database.end(), cmp_lambda);
