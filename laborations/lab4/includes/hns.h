@@ -32,13 +32,21 @@ public:
      */
     IPAddress lookup(const HostName&) const;
 private:
+    /* Private data. */
     int default_size = 4500;
     size_t table_size;
+    size_t num_insert = 0;
+    size_t min_free_divisor = 5; // 1/5 -> 20% left.
+    size_t resize_at; // table_size-(table_size/min_free_divisor)
+    size_t resize_factor = 2;
     mutable hashMap database;
+    /* Private methods. */
     std::hash<HostName> hash_host;
     size_t get_index(const HostName& host) const;
     HostIPPair_iter get_HostIPPair_iter(const HostName& host,
                                         size_t index) const;
+    size_t get_resize_limit();
+    void rehash();
 };
 
 #endif

@@ -2,12 +2,12 @@
 -----------------------------
 vector        0.667     2.300   //O(n)
 map           0.0096    0.0105  //O(log(n))
-unordered     0.0036    0.0036  //~O(1) (wc, O(n) over size of container.)
-hash          0.0031    0.0031  // -- " --
+unordered     0.0036    ~0.0036  //~O(1) (wc, O(n) over size of container.)
+hash          0.0031    ~0.0031  // -- " --
 
-my implementations:
+my implementations: (1e6 searches)
 -----------------------------
 vector        10.26     35.38
-map           0.00146   0.00160
-unordered     0.000392  0.000392
-hash          0.001226  0.001226
+map           0.00154   0.00169
+unordered     0.000449  ~0.000449
+hash          0.000598  ~0.000598
