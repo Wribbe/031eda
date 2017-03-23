@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <regex>
 
 struct Line
     /* Wrapper class for a string to make it possible to read a file
@@ -11,6 +10,14 @@ struct Line
     std::string data;
     operator std::string() const {
         return data;
+    }
+    size_t find(const std::string& str, size_t pos=0) const {
+        (void)pos;
+        size_t found = data.find(str);
+        if (found!=std::string::npos) {
+            return found;
+        }
+        return 0;
     }
 };
 
@@ -30,9 +37,36 @@ std::ostream& operator<<(std::ostream &stream, Line &line)
     return stream;
 }
 
+
+void split(std::string& string, std::string& token)
+    /* Split string at token and return left item. */
+{
+    auto end = string.find(token);
+    string.erase(end, string.length());
+}
+
+void strip(std::string& string)
+    /* Strip whitespace from front and back of string. */
+{
+    std::string whitespace = " \t";
+    auto start = string.find_first_not_of(whitespace);
+    auto end = string.find_last_not_of(whitespace);
+    string.erase(0, start);
+    string.erase(end, string.length());
+}
+
 void printer(Line line)
 {
-    std::cout << line << std::endl;
+    std::string token = "=";
+    if (line.find(token)) {
+        std::string string = line.data;
+        split(string, token);
+        strip(string);
+        std::transform(string.begin(), string.end(),string.begin(),::tolower);
+        std::cout << "void f" << string << std::endl;
+        std::cout << "{" << std::endl;
+        std::cout << "}" << std::endl;
+    }
 }
 
 
