@@ -63,7 +63,7 @@ create_missing_path = $(if $(wildcard $(1)/*),,$(shell mkdir -p $(1)))
 $(dirs) :
 	$(call create_missing_path,$@)
 
-# Tell make how to make the exetuables.
+# Tell make how to make the executables.
 bin/% : $(call objs,%) $(call libs,libclientserver)
 	$(CXX) -o $@ $^
 
