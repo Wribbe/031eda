@@ -10,12 +10,14 @@ MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
 # The directories that exist in the project.
 dirs := sources \
+			sources/helpers\
 		docs \
 		includes \
 		bin \
+			bin/helpers \
 		objects \
 		lib \
-		lib/static
+			lib/static
 # Clean up bin files but not jar-files.
 non_jar_binfiles := $(filter-out %.jar,$(wildcard bin/*))
 remove_on_clean := objects lib/static $(non_jar_binfiles)
@@ -29,7 +31,7 @@ $(foreach dir,$(dirs),\
 
 SRC_EXTENSION = .cc
 # Set path for source files.
-vpath %$(SRC_EXTENSION) $(dir_lib) $(dir_sources)
+vpath %$(SRC_EXTENSION) $(dir_lib) $(dir_sources) $(dir_sources_helpers)
 
 # Set compiler and compiler flags.
 CXX = g++
@@ -44,10 +46,16 @@ CXXFLAGS += $(INCUDE_FLAGS)
 # Find and save path to all source files.
 CC_SOURCES := $(wildcard $(dir_sources)/*$(SRC_EXTENSION))
 
+
 # For all found source files, replace $(SRC_EXTENSION) with '', take the file
 # part of the path and construct the path so that the target target ends up in
 # the bin folder.
 EXECS := $(foreach path,$(CC_SOURCES),$(dir_bin)/$(notdir $(path:$(SRC_EXTENSION)=)))
+
+# Find and add helper sources.
+EXECS += $(foreach path,$(wildcard $(dir_sources_helpers)/*$(SRC_EXTENSION)), \
+			 $(dir_bin_helpers)/$(notdir $(path:$(SRC_EXTENSION)=)) \
+		 )
 
 # Helper function for calling several objects as prerequisites.
 objs = $(foreach name,$(1),$(dir_objects)/$(name).o)
@@ -63,9 +71,16 @@ create_missing_path = $(if $(wildcard $(1)/*),,$(shell mkdir -p $(1)))
 $(dirs) :
 	$(call create_missing_path,$@)
 
-# Tell make how to make the executables.
-bin/% : $(call objs,%) $(call libs,libclientserver)
-	$(CXX) -o $@ $^
+# General recipe for executables.
+make_executables = $(CXX) -o $@ $^
+
+# Special path specification for helper executables.
+bin/helpers/% : $(dir_objects)/%.o
+	$(make_executables)
+
+# Case for regular executables.
+$(dir_bin)/% : $(call objs,%) $(call libs,libclientserver)
+	$(make_executables)
 
 # Tell make how to make object files.
 
