@@ -1,0 +1,9 @@
+.
+├── bin             // Folder for C++ and Java executables.
+├── docs            // Documentation and project description.
+├── example-code    // Available example code from project.
+│   └── java
+├── includes        // Project header files.
+├── lib             // Static libraries & sources for non executable C++ files.
+├── Makefile        // GNU make build script for project.
+└── sources         // Source of executable C++ files.
