@@ -1,0 +1,4 @@
+# Ignore following folders.
+bin
+objects
+lib/static
