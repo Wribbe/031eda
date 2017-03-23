@@ -24,7 +24,7 @@ remove_on_clean := objects lib/static $(non_jar_binfiles)
 # Prefix for dir variables.
 dir_var_prefix := dir_
 
-# Create all dir variables.
+# Create all dir variables replace '/' in sub-dirs with '_'.
 $(foreach dir,$(dirs),\
 	$(eval $(dir_var_prefix)$(subst /,_,$(dir)) := $(dir)) \
 )
