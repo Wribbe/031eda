@@ -12,7 +12,9 @@ dirs := sources \
 		objects \
 		lib \
 		lib/static
-remove_on_clean := bin objects lib/static
+# Clean up bin files but not jar-files.
+non_jar_binfiles := $(filter-out %.jar,$(wildcard bin/*))
+remove_on_clean := objects lib/static $(non_jar_binfiles)
 # Prefix for dir variables.
 dir_var_prefix := dir_
 
