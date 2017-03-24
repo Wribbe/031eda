@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <map>
 
 struct Line
     /* Wrapper class for a string to make it possible to read a file
@@ -52,8 +53,11 @@ void strip(std::string& string)
     auto start = string.find_first_not_of(whitespace);
     auto end = string.find_last_not_of(whitespace);
     string.erase(0, start);
-    string.erase(end, string.length());
+    string.erase(end-1, string.length());
 }
+
+//std::map<std::string,void (*) (void)> map_functions;
+std::map<std::string,std::string> string_map;
 
 void printer(Line line)
 {
@@ -62,10 +66,15 @@ void printer(Line line)
         std::string string = line.data;
         split(string, token);
         strip(string);
-        std::transform(string.begin(), string.end(),string.begin(),::tolower);
-        std::cout << "void f" << string << std::endl;
+        std::string lower(string);
+        std::transform(string.begin(), string.end(),lower.begin(),::tolower);
+        std::string function_name = "f_" + lower;
+        std::cout << "void " << function_name << "() " << std::endl;
         std::cout << "{" << std::endl;
+        std::cout << "  std::cout << \"Hello from: " << string << "\" << std::endl;" << std::endl;
         std::cout << "}" << std::endl;
+        std::cout << std::endl;
+        string_map.emplace(string, function_name);
     }
 }
 
@@ -89,5 +98,30 @@ int main(int argc, char ** argv)
 
     std::istream_iterator<Line> iter = std::istream_iterator<Line>(file);
     std::istream_iterator<Line> end;
+    std::cout << "#include <iostream>" << std::endl;
+    std::cout << "#include <map>" << std::endl;
     for_each(iter, end, printer);
+
+    // Print main function.
+    std::cout << "int main(int argc, char ** argv)" << std::endl;
+    std::cout << "{" << std::endl;
+
+    std::cout << "  std::map<std::string,void (*) (void)> func_map;" << std::endl;
+
+    for(auto pair : string_map) {
+        std::cout << "  func_map.emplace(\"" << pair.first << "\"," << pair.second << ");" << std::endl;
+    }
+
+    std::cout << "  std::string token_name;" << std::endl;
+    std::cout << "  std::cout << \"Enter a protocol token:\" << std::endl;" << std::endl;
+    std::cout << "  while(std::cin >> token_name) {" << std::endl;
+    std::cout << "      auto pointer = func_map.find(token_name);" << std::endl;
+    std::cout << "      if (pointer == func_map.end()) {" << std::endl;
+    std::cout << "          std::cout << \"Don't know what to do about: \" << token_name << \", try another.\" << std::endl;" << std::endl;
+    std::cout << "      } else {" << std::endl;
+    std::cout << "          (*pointer).second();" << std::endl;
+    std::cout << "      }" << std::endl;
+    std::cout << "  }" << std::endl;
+
+    std::cout << "}" << std::endl;
 }
