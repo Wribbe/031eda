@@ -57,11 +57,26 @@ void strip(std::string& string)
     string.erase(end-1, string.length());
 }
 
-//std::map<std::string,void (*) (void)> map_functions;
 std::map<std::string,std::string> string_map;
 
 template <typename T>
-void printer(std::vector<T>& lines)
+void print(const T& string)
+    /* Print string to std::cout without newline. */
+{
+    std::cout << string;
+}
+
+template <typename T>
+void println(const T& string)
+    /* Print string to std::cout with newline. */
+{
+    print(string);
+    std::cout << std::endl;
+}
+
+
+template <typename T>
+void hello_function_printer(std::vector<T>& lines)
 {
     for (T string : lines) {
         std::string token = "=";
@@ -71,11 +86,11 @@ void printer(std::vector<T>& lines)
             std::string lower(string);
             std::transform(string.begin(), string.end(),lower.begin(),::tolower);
             std::string function_name = "f_" + lower;
-            std::cout << "void " << function_name << "() " << std::endl;
-            std::cout << "{" << std::endl;
-            std::cout << "  std::cout << \"Hello from: " << string << "\" << std::endl;" << std::endl;
-            std::cout << "}" << std::endl;
-            std::cout << std::endl;
+            println("void " + function_name + "() ");
+            println("{");
+            println("  println(\"Hello from: "+ string + "\");");
+            println("}");
+            println("");
             string_map.emplace(string, function_name);
         }
     }
@@ -100,10 +115,11 @@ void add_includes(std::vector<std::string> libs)
     /* Print libraries that should be included. */
 {
     for (std::string lib : libs) {
-        std::cout << "#include <" << lib << ">" << std::endl;
+        println("#include <" + lib + ">");
     }
-    std::cout << std::endl;
+    println("");
 }
+
 
 int main(int argc, char ** argv)
 {
@@ -120,28 +136,26 @@ int main(int argc, char ** argv)
                                             "map",
                                         };
     add_includes(includes);
-    printer(lines);
+    hello_function_printer(lines);
 
     // Print main function.
-    std::cout << "int main(int argc, char ** argv)" << std::endl;
-    std::cout << "{" << std::endl;
-
-    std::cout << "  std::map<std::string,void (*) (void)> func_map;" << std::endl;
+    println("int main(int argc, char ** argv)");
+    println("{");
+    println("  std::map<std::string,void (*) (void)> func_map;");
 
     for(auto pair : string_map) {
-        std::cout << "  func_map.emplace(\"" << pair.first << "\"," << pair.second << ");" << std::endl;
+        println("  func_map.emplace(\"" + pair.first + "\"," + pair.second + ");");
     }
 
-    std::cout << "  std::string token_name;" << std::endl;
-    std::cout << "  std::cout << \"Enter a protocol token:\" << std::endl;" << std::endl;
-    std::cout << "  while(std::cin >> token_name) {" << std::endl;
-    std::cout << "      auto pointer = func_map.find(token_name);" << std::endl;
-    std::cout << "      if (pointer == func_map.end()) {" << std::endl;
-    std::cout << "          std::cout << \"Don't know what to do about: \" << token_name << \", try another.\" << std::endl;" << std::endl;
-    std::cout << "      } else {" << std::endl;
-    std::cout << "          (*pointer).second();" << std::endl;
-    std::cout << "      }" << std::endl;
-    std::cout << "  }" << std::endl;
-
-    std::cout << "}" << std::endl;
+    println("  std::string token_name;");
+    println("  std::cout << \"Enter a protocol token:\" << std::endl;");
+    println("  while(std::cin >> token_name) {");
+    println("    auto pointer = func_map.find(token_name);");
+    println("    if (pointer == func_map.end()) {");
+    println("        println(\"Don't know what to do about: \" + token_name + \", try another.\");");
+    println("    } else {");
+    println("        (*pointer).second();");
+    println("    }");
+    println("  }");
+    println("}");
 }
