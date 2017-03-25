@@ -78,6 +78,16 @@ void printer(Line line)
     }
 }
 
+std::istream_iterator<Line> file_line_iterator(std::string filepath)
+    /* Open file and return iterator that reads file line-by-line. */
+{
+    std::ifstream file(filepath);
+    if(!file.is_open()) {
+        std::cerr << "No such file: " << filepath << ", aborting." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    return std::istream_iterator<Line>(file);
+}
 
 int main(int argc, char ** argv)
 {
@@ -88,15 +98,7 @@ int main(int argc, char ** argv)
         return EXIT_FAILURE;
     }
 
-    std::string filepath(argv[1]);
-
-    std::ifstream file(filepath);
-    if(!file.is_open()) {
-        std::cerr << "No such file: " << filepath << ", aborting." << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    std::istream_iterator<Line> iter = std::istream_iterator<Line>(file);
+    std::istream_iterator<Line> iter = file_line_iterator(argv[1]);
     std::istream_iterator<Line> end;
     std::cout << "#include <iostream>" << std::endl;
     std::cout << "#include <map>" << std::endl;
