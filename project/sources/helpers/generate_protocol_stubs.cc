@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iterator>
 #include <map>
+#include <vector>
 
 struct Line
     /* Wrapper class for a string to make it possible to read a file
@@ -12,16 +13,16 @@ struct Line
     operator std::string() const {
         return data;
     }
-    size_t find(const std::string& str, size_t pos=0) const {
-        (void)pos;
-        size_t found = data.find(str);
-        if (found!=std::string::npos) {
-            return found;
-        }
-        return 0;
-    }
 };
 
+size_t find(const std::string& str, const std::string& source)
+{
+    size_t found = source.find(str);
+    if (found!=std::string::npos) {
+        return found;
+    }
+    return 0;
+}
 
 std::istream& operator>>(std::istream &stream, Line &line)
     /* Operation that deposit's the input into the line data string. */
@@ -59,34 +60,49 @@ void strip(std::string& string)
 //std::map<std::string,void (*) (void)> map_functions;
 std::map<std::string,std::string> string_map;
 
-void printer(Line line)
+template <typename T>
+void printer(std::vector<T>& lines)
 {
-    std::string token = "=";
-    if (line.find(token)) {
-        std::string string = line.data;
-        split(string, token);
-        strip(string);
-        std::string lower(string);
-        std::transform(string.begin(), string.end(),lower.begin(),::tolower);
-        std::string function_name = "f_" + lower;
-        std::cout << "void " << function_name << "() " << std::endl;
-        std::cout << "{" << std::endl;
-        std::cout << "  std::cout << \"Hello from: " << string << "\" << std::endl;" << std::endl;
-        std::cout << "}" << std::endl;
-        std::cout << std::endl;
-        string_map.emplace(string, function_name);
+    for (T string : lines) {
+        std::string token = "=";
+        if (find(token,string)) {
+            split(string, token);
+            strip(string);
+            std::string lower(string);
+            std::transform(string.begin(), string.end(),lower.begin(),::tolower);
+            std::string function_name = "f_" + lower;
+            std::cout << "void " << function_name << "() " << std::endl;
+            std::cout << "{" << std::endl;
+            std::cout << "  std::cout << \"Hello from: " << string << "\" << std::endl;" << std::endl;
+            std::cout << "}" << std::endl;
+            std::cout << std::endl;
+            string_map.emplace(string, function_name);
+        }
     }
 }
 
-std::istream_iterator<Line> file_line_iterator(std::string filepath)
-    /* Open file and return iterator that reads file line-by-line. */
+std::vector<std::string> get_lines(std::string filepath)
+    /* Open file and return vector with the lines from the given file path. */
 {
     std::ifstream file(filepath);
     if(!file.is_open()) {
         std::cerr << "No such file: " << filepath << ", aborting." << std::endl;
         exit(EXIT_FAILURE);
     }
-    return std::istream_iterator<Line>(file);
+    std::vector<std::string> lines;
+    auto iter = std::istream_iterator<Line>(file);
+    auto end = std::istream_iterator<Line>();
+    std::copy(iter, end, back_inserter(lines));
+    return lines;
+}
+
+void add_includes(std::vector<std::string> libs)
+    /* Print libraries that should be included. */
+{
+    for (std::string lib : libs) {
+        std::cout << "#include <" << lib << ">" << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 int main(int argc, char ** argv)
@@ -98,11 +114,13 @@ int main(int argc, char ** argv)
         return EXIT_FAILURE;
     }
 
-    std::istream_iterator<Line> iter = file_line_iterator(argv[1]);
-    std::istream_iterator<Line> end;
-    std::cout << "#include <iostream>" << std::endl;
-    std::cout << "#include <map>" << std::endl;
-    for_each(iter, end, printer);
+    std::vector<std::string> lines = get_lines(argv[1]);
+    std::vector<std::string> includes = std::vector<std::string>{
+                                            "iostream",
+                                            "map",
+                                        };
+    add_includes(includes);
+    printer(lines);
 
     // Print main function.
     std::cout << "int main(int argc, char ** argv)" << std::endl;
