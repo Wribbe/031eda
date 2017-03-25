@@ -2,5 +2,6 @@
 bin
 objects
 lib/static
+sources/generated
 # Ignore java class files.
  *.class
