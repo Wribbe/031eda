@@ -1,20 +1,29 @@
+#ifndef ARTICLE_H
+#define ARTICLE_H
+
 #include <iostream>
+#include <ostream>
 #include <string>
 
 class Article
 {
 public:
+    friend std::ostream& operator<<(std::ostream& stream, Article& article);
     /* Constructors. */
-    Article(int id);
+    Article(uint32_t id);
     Article(
-            int id,
+            uint32_t id,
             std::string title,
             std::string author,
             std::string text
            );
 private:
-    int id;
+    uint32_t id;
     std::string title;
     std::string author;
     std::string text;
 };
+
+std::ostream& operator<<(std::ostream& stream, Article& article);
+
+#endif
