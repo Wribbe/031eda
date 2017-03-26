@@ -114,16 +114,19 @@ $(dirs) :
 # General recipe for executables.
 make_executables = $(CXX) -o $@ $^
 
+# List dependencies for all executables.
+exec_deps := $(call objs,article) $(call libs,libclientserver)
+
 # Special path specification for generated executables.
-$(dir_bin_generated)/% : $(dir_objects)/%.o $(call libs,libclientserver)
+$(dir_bin_generated)/% : $(dir_objects)/%.o $(exec_deps)
 	$(make_executables)
 
 # Special path specification for generator executables.
-$(dir_bin_generators)/% : $(dir_objects)/%.o $(call libs,libclientserver)
+$(dir_bin_generators)/% : $(dir_objects)/%.o $(exec_deps)
 	$(make_executables)
 
 # Case for regular executables.
-$(dir_bin)/% : $(call objs,%) $(call libs,libclientserver)
+$(dir_bin)/% : $(call objs,%) $(exec_deps)
 	$(make_executables)
 
 # Tell make how to make object files.
@@ -142,7 +145,7 @@ $(call objs,%): %$(SRC_EXTENSION) | $(dirs)
 	$(CXX) $^ -c -o $@ $(CXXFLAGS)
 
 # Recipe to create libclientserver.a.
-$(call libs,libclientserver): $(call objs,connection server print_functions article)
+$(call libs,libclientserver): $(call objs,connection server print_functions)
 	@ar rv $@ $^
 	@ranlib $@
 
