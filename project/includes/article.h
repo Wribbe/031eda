@@ -24,6 +24,8 @@ private:
     std::string text;
 };
 
+Article article_from_binary(std::string& binary_string, uint32_t bits=32);
+
 std::ostream& operator<<(std::ostream& stream, Article& article);
 
 #endif
