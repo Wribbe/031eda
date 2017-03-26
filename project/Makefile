@@ -142,7 +142,7 @@ $(call objs,%): %$(SRC_EXTENSION) | $(dirs)
 	$(CXX) $^ -c -o $@ $(CXXFLAGS)
 
 # Recipe to create libclientserver.a.
-$(call libs,libclientserver): $(call objs,connection server print_functions)
+$(call libs,libclientserver): $(call objs,connection server print_functions article)
 	@ar rv $@ $^
 	@ranlib $@
 
