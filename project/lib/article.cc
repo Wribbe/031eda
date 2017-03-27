@@ -4,23 +4,37 @@
 #include "article.h"
 
 Article::Article(uint32_t id) :
-    id(id),
-    title(""),
-    author(""),
-    text("")
+    pid(id),
+    ptitle(""),
+    pauthor(""),
+    ptext("")
     /* Default constructor for Article. */
 {
     /* Empty */
+}
+
+const uint32_t& Article::id() {
+    return pid;
+}
+
+const std::string& Article::title() {
+    return ptitle;
+}
+const std::string& Article::author() {
+    return pauthor;
+}
+const std::string& Article::text() {
+    return ptext;
 }
 
 Article::Article(uint32_t id,
                  std::string title,
                  std::string author,
                  std::string text) :
-    id(id),
-    title(title),
-    author(author),
-    text(text)
+    pid(id),
+    ptitle(title),
+    pauthor(author),
+    ptext(text)
     /* Specified constructor for Article. */
 {
     /* Empty */
@@ -45,7 +59,7 @@ std::string num_to_binary(uint32_t number, size_t bits=32)
     return stream.str();
 }
 
-size_t bitsize_char = 4;
+size_t bitsize_char = 8;
 size_t bitsize_uint32_t = 32;
 size_t chars_in_uint32 = bitsize_uint32_t/bitsize_char;
 
@@ -58,14 +72,12 @@ std::string binary_string(std::string string)
     size_t length = string.length();
 
     for(size_t i=0; i<length; ++i) {
-        if (i > 0) {
+        if (i%chars_in_uint32 > 0) {
             current <<= bitsize_char;
             shifts++;
         }
-        // Traverse the string backwards,
-        // will be easier to unpack.
-        current += string[(length-1)-i];
-        if (shifts == chars_in_uint32) {
+        current += string[i];
+        if (shifts == chars_in_uint32-1) {
             stream << num_to_binary(current);
             current = 0;
             shifts = 0;
@@ -87,10 +99,10 @@ std::string binary_with_length_prefix(std::string string)
 
 std::ostream& operator<<(std::ostream& stream, Article& article)
 {
-    stream << num_to_binary(article.id);
-    stream << binary_with_length_prefix(article.title);
-    stream << binary_with_length_prefix(article.author);
-    stream << binary_with_length_prefix(article.text);
+    stream << num_to_binary(article.id());
+    stream << binary_with_length_prefix(article.title());
+    stream << binary_with_length_prefix(article.author());
+    stream << binary_with_length_prefix(article.text());
     return stream;
 }
 
@@ -114,19 +126,44 @@ uint32_t num_32chunks_to_read(uint32_t string_length)
     return chunks;
 }
 
+std::string chunks_to_string(bin_iter& p1, bin_iter& p2, size_t chunks)
+{
+    std::stringstream stream;
+    uint32_t stream_base = 2;
+    for (size_t i=0; i<chunks; ++i) {
+        while(p1 != p2) {
+            uint32_t number = std::stoul(std::string(p1,p1+bitsize_char),
+                                         nullptr,
+                                         stream_base);
+            if (number > 0) { // Ignore null values.
+                stream << static_cast<char>(number);
+            }
+            p1 += bitsize_char;
+        }
+        p2 += bitsize_uint32_t;
+    }
+    return stream.str();
+}
+
 Article article_from_binary(std::string& binary_string, uint32_t bits)
 {
     bin_iter p1 = binary_string.begin();
     bin_iter p2 = binary_string.begin()+bits;
-    auto end = binary_string.end();
 
     // Decode id.
     uint32_t id = get_prefix(p1,p2);
-
     // Decode title length.
     uint32_t length_title = get_prefix(p1,p2);
     // Get number of 32-bit chunks to read.
     uint32_t chunks = num_32chunks_to_read(length_title);
+    // Decode title chunks.
+    std::string title = chunks_to_string(p1,p2,chunks);
+    // Decode author chunks.
+    chunks = num_32chunks_to_read(get_prefix(p1,p2));
+    std::string author = chunks_to_string(p1,p2,chunks);
+    // Decode text chunks.
+    chunks = num_32chunks_to_read(get_prefix(p1,p2));
+    std::string text = chunks_to_string(p1,p2,chunks);
 
-    return Article(1);
+    return Article(id,title,author,text);
 }
