@@ -32,7 +32,8 @@ int main()
     stream << article;
 
     std::string encoded_article = stream.str();
-    Article decoded = article_from_binary(encoded_article);
+    std::cout << encoded_article << std::endl;
+    Article decoded = article_from_encoded(encoded_article,6,64);
 
     test("Article has same title", article.title(), decoded.title());
     test("Article has same author", article.author(), decoded.author());
