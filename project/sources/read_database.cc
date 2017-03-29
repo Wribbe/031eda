@@ -1,5 +1,9 @@
 #include <dirent.h>
+#include <fstream>
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
 
 bool is_newsgroup_file(struct dirent * dp)
 {
@@ -12,15 +16,44 @@ bool is_newsgroup_file(struct dirent * dp)
 
 int main(void)
 {
-    DIR * dirp = opendir("inputs/database");
+    std::string database_folder = "inputs/database";
+    DIR * dirp = opendir(database_folder.c_str());
+
     if (dirp == NULL) {
         std::cerr << "NO SUCH FOLDER!" << std::endl;
+        return EXIT_FAILURE;
     }
+
+    std::vector<std::string> filepaths;
+
     struct dirent * dp;
+    std::stringstream stream;
     while ((dp = readdir(dirp)) != NULL) {
         if (is_newsgroup_file(dp)) {
-            std::cout << dp->d_name << std::endl;
+            // Construct full path.
+            stream << database_folder;
+            stream << "/";
+            stream << dp->d_name;
+            filepaths.push_back(stream.str());
+            // Reset stream.
+            std::stringstream().swap(stream);
         }
     }
+    // Close open folder.
     (void)closedir(dirp);
+    // Print data from all files.
+    std::string line;
+    for(std::string file_path : filepaths) {
+        std::ifstream file_stream(file_path);
+        if (!file_stream.is_open()) {
+            std::cerr << "No such file: " << file_path << std::endl;
+            return EXIT_FAILURE;
+        }
+        std::cout << "Printing contents of : " << file_path << ":" << std::endl;
+        std::cout << std::endl;
+        while (std::getline(file_stream, line)) {
+            std::cout << "   " << line << std::endl;
+        }
+        std::cout << std::endl;
+    }
 }
