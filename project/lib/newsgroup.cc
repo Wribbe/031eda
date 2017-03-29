@@ -1,6 +1,6 @@
 #include "newsgroup.h"
 
-NewsGroup::NewsGroup(std::string _title, ID _id) : title(_title), id(_id) {}
+NewsGroup::NewsGroup(std::string title, ID id) : _title(title), _id(id) {}
 
 Article& NewsGroup::find(ID _id) {
     for (Article a : articles) {
@@ -10,6 +10,14 @@ Article& NewsGroup::find(ID _id) {
 
 void NewsGroup::add(Article& _a) {
     articles.push_back(a);
+}
+
+std::string NewsGroup::title() {
+    return _title;
+}
+
+ID NewsGroup::id() {
+    return _id;
 }
 
 Article NewsGroup::delete_article(ID _id) {

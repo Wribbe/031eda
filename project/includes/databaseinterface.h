@@ -4,8 +4,9 @@
 #include "article.h"
 #include <string>
 
+using ID = uint32_t;
+
 class DatabaseInterface {
-    using ID = uint32_t;
 public:
     virtual ~DatabaseInterface();
     //Parameters

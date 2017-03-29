@@ -5,17 +5,20 @@
 #include <string>
 #include <vector>
 
+using ID = uint32_t;
+
 class NewsGroup {
-    using ID = uint32_t;
 public:
     NewsGroup(std::string _title, ID _id);
     Article& find(ID _id);
     void add(Article& _a);
     Article delete_article(ID _id);
+    ID id();
+    std::string title();
 private:
     std::vector<Article> articles;
-    std::string title;
-    ID id;
+    std::string _title;
+    ID _id;
 };
 
 #endif
