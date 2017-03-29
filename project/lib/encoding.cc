@@ -133,7 +133,7 @@ std::string libdecode_string(std::istream& stream,
         num_chunks++;
     }
     packtype_t current_value = 0;
-    packtype_t lower_mask = 255;
+    packtype_t lower_mask = (1 << bitsize_char)-1;
 
     for (size_t i=0; i<num_chunks; ++i) {
         current_value = libdecode_value(stream, base, chunk_size);
