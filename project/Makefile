@@ -19,7 +19,8 @@ dirs := sources \
 			bin/generated \
 		objects \
 		lib \
-			lib/static
+			lib/static \
+		inputs
 # Clean up bin files but not jar-files.
 non_jar_binfiles := $(filter-out %.jar,$(wildcard bin/*))
 remove_on_clean := objects lib/static $(non_jar_binfiles) sources/generated
