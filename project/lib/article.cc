@@ -1,6 +1,3 @@
-#include <iterator>
-#include <sstream>
-
 #include "article.h"
 
 Article::Article(uint32_t id,
