@@ -5,46 +5,41 @@
 #include <ostream>
 #include <string>
 
-#define BASE 64
-#define CHUNK_SIZE 32
-
-using packtype_t = uint64_t;
-
-size_t bitsize_char = 8;
-size_t bitsize_packtype_t = sizeof(packtype_t)*8;
-size_t chars_in_packtype = bitsize_packtype_t/bitsize_char;
-
+#include "encoding.h"
 
 class Article
 {
 public:
+    /* Friends. */
     friend std::ostream& operator<<(std::ostream& stream, Article& article);
+    friend std::istream& operator>>(std::istream& stream, Article& article);
     /* Constructors. */
-    Article(uint32_t id);
+    Article(std::istream& encoded_stream);
     Article(
             uint32_t id,
-            std::string title,
-            std::string author,
-            std::string text
+            std::string& title,
+            std::string& author,
+            std::string& text
            );
     /* Public methods. */
-    std::string encode(packtype_t base=BASE);
-    /* Public getters. */
-    const uint32_t& id();
-    const std::string& title();
-    const std::string& author();
-    const std::string& text();
-private:
-    uint32_t pid;
-    std::string ptitle;
-    std::string pauthor;
-    std::string ptext;
+    std::string encode(uint32_t base=base,
+                       uint32_t chunk_size=bitsize_packtype_t);
+    void decode(std::istream& stream,
+                uint32_t base=base,
+                uint32_t chunk_size=bitsize_packtype_t);
+    /* Getters. */
+    uint32_t id();
+    std::string title();
+    std::string author();
+    std::string text();
+//private:
+    uint32_t _id;
+    std::string _title;
+    std::string _author;
+    std::string _text;
 };
 
-Article article_from_encoded(std::string& binary_string,
-                             uint32_t bits=CHUNK_SIZE,
-                             uint32_t base=BASE);
-
 std::ostream& operator<<(std::ostream& stream, Article& article);
+std::istream& operator>>(std::istream& stream, Article& article);
 
 #endif

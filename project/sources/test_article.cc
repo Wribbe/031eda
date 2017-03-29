@@ -21,7 +21,7 @@ void test(const std::string& message,
 
 int main()
 {
-    uint32_t id = 1;
+    uint32_t id = 82;
     std::string title = "This is title.";
     std::string author = "Test author.";
     std::string text = "This is a multiline\ntext snippet\nthat is the body of the article.";
@@ -31,9 +31,13 @@ int main()
     Article article(id,title,author,text);
     stream << article;
 
-    std::string encoded_article = stream.str();
-    std::cout << encoded_article << std::endl;
-    Article decoded = article_from_encoded(encoded_article,6,64);
+    std::cout << stream.str() << std::endl;
+    Article decoded(stream);
+
+    std::cout << "id: " << decoded.id() << std::endl;
+    std::cout << "title: " << decoded.title() << std::endl;
+    std::cout << "author: " << decoded.author() << std::endl;
+    std::cout << "text: " << decoded.text() << std::endl;
 
     test("Article has same title", article.title(), decoded.title());
     test("Article has same author", article.author(), decoded.author());

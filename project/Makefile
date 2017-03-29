@@ -115,7 +115,7 @@ $(dirs) :
 make_executables = $(CXX) -o $@ $^
 
 # List dependencies for all executables.
-exec_deps := $(call objs,article) $(call libs,libclientserver)
+exec_deps := $(call objs,article encoding) $(call libs,libclientserver)
 
 # Special path specification for generated executables.
 $(dir_bin_generated)/% : $(dir_objects)/%.o $(exec_deps)
@@ -155,6 +155,5 @@ clean :
 
 # Clean and redo all target.
 re: clean all
-
 
 .PHONY: all clean re
