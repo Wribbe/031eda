@@ -35,14 +35,19 @@ Article MemoryDatabase::delete_article(ID ng_id, ID a_id) {
         vector<Article> articles = database[ng_id]; //Need reference or not?
         for (auto it = articles.begin(); it != articles.end(); ++it) {
             if(it->get_ID() == a_id) {
+                Article ret = *it;
                 articles.erase(it);
-                return *it;
+                return *ret;z
             }
         }
     } catch (exception& e) {
         throw e;
         return NULL; //NULL?
     }
+}
+
+void MemoryDatabase::delete_newsgroup(ID ng_id) {
+    database.erase(ng_id);
 }
 
 bool MemoryDatabase::exists(ID ng_id) {

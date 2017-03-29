@@ -17,6 +17,10 @@ Article DiskDatabase::delete_article(ID ng_id, ID a_id) {
     return NULL;
 }
 
+void DiskDatabase::delete_newsgroup(ID ng_id) {
+
+}
+
 bool DiskDatabase::exists(ID ng_id) {
     if (database.at(ng_id) != database.end()) { return true; }
     else { return false; }

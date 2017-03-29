@@ -13,6 +13,8 @@ public:
     virtual Article load_article(ID ng_id, ID a_id);
     //Parameters?
     virtual Article delete_article(ID ng_id, ID a_id);
+    //Parameters?
+    virtual void delete_newsgroup(ID ng_id);
     //Is this necessary? Should it be sorted by ID or name?
     virtual bool exists(ID ng_id);
 };

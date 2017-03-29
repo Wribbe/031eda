@@ -13,6 +13,8 @@ public:
     Article load_article(ID ng_id, ID a_id);
     //Parameters?
     Article delete_article(ID ng_id, ID a_id);
+    //Param?
+    void delete_newsgroup(ID ng_id);
     //Is this necessary? Should it be sorted by ID or name?
     bool exists(ID ng_id);
 private:
