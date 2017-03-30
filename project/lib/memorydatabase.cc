@@ -1,6 +1,9 @@
 #include "memorydatabase.h"
 
-MemoryDatabase::MemoryDatabase() {}
+MemoryDatabase::MemoryDatabase()
+{
+    /* Empty constructor. */
+}
 
 void MemoryDatabase::create_newsgroup(std::string title, ID ng_id) {
     for (auto it = database.begin(); it != database.end(); ++it) {
@@ -23,8 +26,7 @@ Article& MemoryDatabase::load_article(ID ng_id, ID a_id) {
 }
 
 Article& MemoryDatabase::delete_article(ID ng_id, ID a_id) {
-    Article a = database[ng_id].delete_article(a_id);
-    return a;
+    return database[ng_id].delete_article(a_id);
 }
 
 void MemoryDatabase::delete_newsgroup(ID ng_id) {

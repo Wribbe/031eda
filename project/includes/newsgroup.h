@@ -10,9 +10,10 @@ using ID = uint32_t;
 class NewsGroup {
 public:
     NewsGroup(std::string _title, ID _id);
+    NewsGroup() : NewsGroup("empty", 0){};
     Article& find(ID _id);
     void add(Article& _a);
-    Article delete_article(ID _id);
+    Article& delete_article(ID _id);
     ID id();
     std::string title();
 private:
