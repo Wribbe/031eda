@@ -50,7 +50,7 @@ int main(void)
             return EXIT_FAILURE;
         }
         std::cout << "Printing contents of : " << file_path << ":" << std::endl;
-        std::cout << std::endl;
+        std::cout << std::endl; // Newline separation.
         while (std::getline(file_stream, line)) {
             std::cout << "   " << line << std::endl;
         }

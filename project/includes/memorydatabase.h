@@ -8,6 +8,7 @@
 class MemoryDatabase : public DatabaseInterface {
 public:
     MemoryDatabase();
+    ~MemoryDatabase() {};
     void create_newsgroup(std::string title, ID ng_id);
     void save_article(ID ng_id, Article a);
     //Parameters?

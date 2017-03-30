@@ -12,6 +12,15 @@ Article::Article(uint32_t id,
     /* Empty constructor. */
 }
 
+Article::Article() :
+    _id(0),
+    _title(""),
+    _author(""),
+    _text("")
+{
+    /* Empty constructor. */
+}
+
 Article::Article(std::istream& encoded_stream)
 {
     encoded_stream >> *this;

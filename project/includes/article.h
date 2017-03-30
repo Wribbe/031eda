@@ -14,6 +14,7 @@ public:
     friend std::ostream& operator<<(std::ostream& stream, Article& article);
     friend std::istream& operator>>(std::istream& stream, Article& article);
     /* Constructors. */
+    Article();
     Article(std::istream& encoded_stream);
     Article(
             uint32_t id,
@@ -41,5 +42,7 @@ public:
 
 std::ostream& operator<<(std::ostream& stream, Article& article);
 std::istream& operator>>(std::istream& stream, Article& article);
+
+static Article null_article;
 
 #endif
