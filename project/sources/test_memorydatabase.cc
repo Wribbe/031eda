@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    MemoryDatabase md;
+    /*MemoryDatabase md;
     string author("Nils");
     string text("Worthless text");
     string title("Wonderful title");
@@ -32,5 +32,5 @@ int main() {
 
     cout << md.load_article(83, 1) << endl;
     cout << md.load_article(83, 2) << endl;
-    cout << md.delete_article(85, 3) << endl;
+    cout << md.delete_article(85, 3) << endl;*/
 }

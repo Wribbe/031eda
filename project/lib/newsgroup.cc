@@ -1,16 +1,22 @@
 #include "newsgroup.h"
 
-NewsGroup::NewsGroup(std::string title, ID id) : _title(title), _id(id) {}
+NewsGroup::NewsGroup(std::string title, ID id) : _title(title), _id(id), article_ID(0) {}
 
-Article& NewsGroup::find(ID _id) {
+Article& NewsGroup::find_article(ID _id) {
     for (Article& a : articles) {
         if (a.id() == _id) { return a; }
     }
     return null_article;
 }
 
-void NewsGroup::add(Article& a) {
+void NewsGroup::save_article(std::string& a_title, std::string& a_author, std::string& a_text) {
+    ++article_ID;
+    Article a(article_ID, a_title, a_author, a_text);
     articles.push_back(a);
+}
+
+std::vector<Article>& NewsGroup::get_articles() {
+    return articles;
 }
 
 std::string NewsGroup::title() {
