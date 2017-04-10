@@ -66,8 +66,60 @@ int main(int argc, char *argv[]) {
 
     while (true) {
         try {
+            //TODO
+            //Refactor duplicate code into methods in procotol.cc
             unsigned int command = readCommand();
-            cout << "Type another number: ";
+            switch (command) {
+                case Protocol::COM_LIST_NG: { //Must use compound stmt when we have a declaration stmt
+                    conn.write(Protocol::COM_LIST_NG);
+                    conn.write(Protocol::COM_END);
+                    unsigned char data = conn.read();
+                    break;
+                }
+                case Protocol::COM_CREATE_NG: {
+                    conn.write(Protocol::COM_CREATE_NG);
+                    //conn.write(name of ng);
+                    conn.write(Protocol::COM_END);
+                    unsigned char data = conn.read();
+                    break;
+                }
+                case Protocol::COM_DELETE_NG: {
+                    conn.write(Protocol::COM_DELETE_NG);
+                    //conn.write(some parameters);
+                    conn.write(Protocol::COM_END);
+                    unsigned char data = conn.read();
+                    break;
+                }
+                case Protocol::COM_LIST_ART: {
+                    conn.write(Protocol::COM_LIST_ART);
+                    //conn.write(some parameters);
+                    conn.write(Protocol::COM_END);
+                    unsigned char data = conn.read();
+                    break;
+                }
+                case Protocol::COM_CREATE_ART: {
+                    conn.write(Protocol::COM_CREATE_ART);
+                    //conn.write(some parameters);
+                    conn.write(Protocol::COM_END);
+                    unsigned char data = conn.read();
+                    break;
+                }
+                case Protocol::COM_DELETE_ART: {
+                    conn.write(Protocol::COM_DELETE_ART);
+                    //conn.write(some parameters);
+                    conn.write(Protocol::COM_END);
+                    unsigned char data = conn.read();
+                    break;
+                }
+                case Protocol::COM_GET_ART: {
+                    conn.write(Protocol::COM_GET_ART);
+                    conn.write(Protocol::COM_END);
+                    unsigned char data = conn.read();
+                    break;
+                }
+                default:
+                    break;
+            }
         } catch (ConnectionClosedException &) {
             cout << " no reply from server. Exiting." << endl;
             exit(1);
