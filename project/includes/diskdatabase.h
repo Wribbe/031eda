@@ -7,22 +7,30 @@
 class DiskDatabase : public DatabaseInterface {
 public:
     DiskDatabase();
+
     bool create_newsgroup(std::string title);
+
     void save_article(ID ng_id, Article a);
+
     //Parameters?
-    Article& load_article(ID ng_id, ID a_id);
+    Article &load_article(ID ng_id, ID a_id);
+
     //Parameters?
-    Article& delete_article(ID ng_id, ID a_id);
+    Article &delete_article(ID ng_id, ID a_id);
+
     //Param?
     void delete_newsgroup(ID ng_id);
+
     //Is this necessary? Should it be sorted by ID or name?
     bool exists(ID ng_id);
 
-    NewsGroup& get_newsgroup(ID ng_id);
+    NewsGroup &get_newsgroup(ID ng_id);
+
     //
-    std::vector<NewsGroup> get_newsgroups();
+    std::vector <NewsGroup> get_newsgroups();
+
 private:
-    std::map<ID, NewsGroup> database;
+    std::map <ID, NewsGroup> database;
     ID newsgroup_ID;
 };
 

@@ -48,6 +48,8 @@ INCUDE_FLAGS := -I$(dir_includes)
 CXXFLAGS := -Wall -Wextra -pedantic-errors -Wold-style-cast -std=c++11
 CXXFLAGS += $(DEBUG_FLAGS)
 CXXFLAGS += $(INCUDE_FLAGS)
+CXXFLAGS += -L/usr/lib -lsqlite3
+
 
 # Find and save path to all source files.
 CC_SOURCES := $(wildcard $(dir_sources)/*$(SRC_EXTENSION))
@@ -116,7 +118,7 @@ $(dirs) :
 make_executables = $(CXX) -o $@ $^
 
 # List dependencies for all executables.
-exec_deps := $(call objs,article encoding memorydatabase newsgroup) $(call libs,libclientserver)
+exec_deps := $(call objs,article encoding memorydatabase diskdatabase newsgroup) $(call libs,libclientserver)
 
 # Special path specification for generated executables.
 $(dir_bin_generated)/% : $(dir_objects)/%.o $(exec_deps)

@@ -14,15 +14,15 @@ bool MemoryDatabase::create_newsgroup(std::string title) {
     return true;
 }
 
-void MemoryDatabase::save_article(ID ng_id, std::string& a_title, std::string& a_author, std::string& a_text) {
+void MemoryDatabase::save_article(ID ng_id, std::string &a_title, std::string &a_author, std::string &a_text) {
     database[ng_id].save_article(a_title, a_author, a_text);
 }
 
-Article& MemoryDatabase::load_article(ID ng_id, ID a_id) {
+Article &MemoryDatabase::load_article(ID ng_id, ID a_id) {
     return database[ng_id].find_article(a_id);
 }
 
-Article& MemoryDatabase::delete_article(ID ng_id, ID a_id) {
+Article &MemoryDatabase::delete_article(ID ng_id, ID a_id) {
     return database[ng_id].delete_article(a_id);
 }
 
@@ -35,12 +35,12 @@ bool MemoryDatabase::exists(ID ng_id) {
     else { return false; }
 }
 
-NewsGroup& MemoryDatabase::get_newsgroup(ID ng_id) {
+NewsGroup &MemoryDatabase::get_newsgroup(ID ng_id) {
     return database[ng_id];
 }
 
-std::vector<NewsGroup> MemoryDatabase::get_newsgroups() {
-    std::vector<NewsGroup> newsgroups;
+std::vector <NewsGroup> MemoryDatabase::get_newsgroups() {
+    std::vector <NewsGroup> newsgroups;
     for (auto it = database.begin(); it != database.end(); ++it) {
         newsgroups.push_back((*it).second);
     }
