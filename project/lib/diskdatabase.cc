@@ -15,11 +15,11 @@ DiskDatabase::DiskDatabase() : newsgroup_ID(0) { //not done
 
 }
 
-void DiskDatabase::create_newsgroup(std::string title) { //not done
+bool DiskDatabase::create_newsgroup(std::string title) { //not done
     if (database.at(ng_id) == database.end()) {
         database[ng_id] = new NewsGroup(title, ng_id);
     }
-
+    return false;
 }
 
 void DiskDatabase::save_article(ID ng_id, std::string& a_title, std::string& a_author, std::string& a_text) { //not done
@@ -54,6 +54,10 @@ void DiskDatabase::delete_newsgroup(ID ng_id) { //not done
 bool DiskDatabase::exists(ID ng_id) { //done
     if (database.at(ng_id) != database.end()) { return true; }
     else { return false; }
+}
+
+NewsGroup& DiskDatabase::get_newsgroup(ID ng_id) {
+    return database[ng_id];
 }
 
 std::vector<NewsGroup> DiskDatabase::get_newsgroups() {

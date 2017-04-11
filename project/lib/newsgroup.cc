@@ -9,6 +9,13 @@ Article& NewsGroup::find_article(ID _id) {
     return null_article;
 }
 
+bool NewsGroup::article_exists(ID _id) {
+    for (Article& a : articles) {
+        if (a.id() == _id) { return true; }
+    }
+    return false;
+}
+
 void NewsGroup::save_article(std::string& a_title, std::string& a_author, std::string& a_text) {
     ++article_ID;
     Article a(article_ID, a_title, a_author, a_text);
