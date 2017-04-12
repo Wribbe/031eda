@@ -25,7 +25,7 @@ CREATE TABLE articles (
     content TEXT NOT NULL,
     ng_id   INTEGER NOT NULL,
     PRIMARY KEY (art_id),
-    FOREIGN KEY (ng_id) REFERENCES newsgroups(id)
+    FOREIGN KEY (ng_id) REFERENCES newsgroups(id) ON DELETE CASCADE
 );
 
 -- We will do a lot of inserts, so we start a transaction to make it faster.
