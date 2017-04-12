@@ -43,11 +43,12 @@ vpath %$(SRC_EXTENSION) $(dir_lib) \
 CXX = g++
 
 DEBUG_FLAGS := -g
-INCUDE_FLAGS := -I$(dir_includes)
+INCUDE_FLAGS := -lsqlite3 -I$(dir_includes)
 
 CXXFLAGS := -Wall -Wextra -pedantic-errors -Wold-style-cast -std=c++11
 CXXFLAGS += $(DEBUG_FLAGS)
 CXXFLAGS += $(INCUDE_FLAGS)
+
 
 # Find and save path to all source files.
 CC_SOURCES := $(wildcard $(dir_sources)/*$(SRC_EXTENSION))
@@ -113,10 +114,10 @@ $(dirs) :
 	$(call create_missing_path,$@)
 
 # General recipe for executables.
-make_executables = $(CXX) -o $@ $^
+make_executables = $(CXX) -o $@ $(CXXFLAGS) $^
 
 # List dependencies for all executables.
-exec_deps := $(call objs,article encoding memorydatabase newsgroup) $(call libs,libclientserver)
+exec_deps := $(call objs,article encoding memorydatabase diskdatabase newsgroup) $(call libs,libclientserver)
 
 # Special path specification for generated executables.
 $(dir_bin_generated)/% : $(dir_objects)/%.o $(exec_deps)
