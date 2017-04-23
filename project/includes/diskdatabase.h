@@ -1,6 +1,8 @@
 #ifndef DISKDATABASE_H
 #define DISKDATABASE_H
 
+#define UNUSED(x) (void)x
+
 #include "databaseinterface.h"
 #include <map>
 #include <sqlite3.h>
@@ -18,6 +20,8 @@ public:
     //Parameters?
     Article &load_article(ID ng_id, ID a_id);
 
+    std::vector <Article> &load_articles(ID ng_id);
+
     //Parameters?
     Article &delete_article(ID ng_id, ID a_id);
 
@@ -25,7 +29,9 @@ public:
     void delete_newsgroup(ID ng_id);
 
     //Is this necessary? Should it be sorted by ID or name?
-    bool exists(ID ng_id);
+    bool newsgroup_exists(ID ng_id);
+
+    bool article_exists(ID ng_id, ID a_id);
 
     NewsGroup &get_newsgroup(ID ng_id);
 

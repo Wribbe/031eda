@@ -73,9 +73,9 @@ int main() {
     ngs = md.get_newsgroups();
     print_ngs(ngs);
 
-    bool exists = md.exists(8);
+    bool exists = md.newsgroup_exists(8);
     cout << "Newsgroup with id 8 exists: " << exists << endl;
-    exists = md.exists(9);
+    exists = md.newsgroup_exists(9);
     cout << "Newsgroup with id 9 exists: " << exists << endl;
     cout << "creating newsgroups" << endl;
 
@@ -100,6 +100,15 @@ int main() {
     md.save_article(1, title, author, text);
     art = md.load_article(1, 4);
     print_article(art);
+
+    cout << "list articles" << endl;
+    vector <Article> arts = md.load_articles(1);
+    print_articles(arts);
+    exists = md.article_exists(1, 4);
+    cout << "article id 4 exists? " << exists << endl;
+    exists = md.article_exists(1, 5);
+    cout << "article id 5 exists? " << exists << endl;
+
 
 
 //    system("sqlite3 usenet.db < setup_db.sql");

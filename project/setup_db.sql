@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS articles;
 
 CREATE TABLE newsgroups (
     id          INTEGER,
-    title       TEXT NOT NULL,
+    title       TEXT NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
 

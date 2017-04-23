@@ -145,7 +145,7 @@ void delete_newsgroup(const shared_ptr <Connection> &conn, DatabaseInterface *da
     //Send answer
     writeByte(conn, Protocol::ANS_DELETE_NG);
     //Delete newsgroup in database with newsgroupID
-    if (database->exists(newsgroupID)) {
+    if (database->newsgroup_exists(newsgroupID)) {
         database->delete_newsgroup(newsgroupID);
         writeByte(conn, Protocol::ANS_ACK);
     } else {
@@ -170,8 +170,8 @@ void list_articles(const shared_ptr <Connection> &conn, DatabaseInterface *datab
     //Send answer
     writeByte(conn, Protocol::ANS_LIST_ART);
     //List articles in database under newsgroupID
-    if (database->exists(newsgroupID)) {
-        vector <Article> &articles = database->get_newsgroup(newsgroupID).get_articles();
+    if (database->newsgroup_exists(newsgroupID)) {
+        vector <Article> &articles = database->load_articles(newsgroupID);
         writeByte(conn, Protocol::ANS_ACK);
         writeByte(conn, Protocol::PAR_NUM);
         writeInt(conn, articles.size());
@@ -213,7 +213,7 @@ void create_article(const shared_ptr <Connection> &conn, DatabaseInterface *data
     //Send answer
     writeByte(conn, Protocol::ANS_CREATE_ART);
     //Create article in database with newsgroupID, title, author, text
-    if (database->exists(newsgroupID)) {
+    if (database->newsgroup_exists(newsgroupID)) {
         database->save_article(newsgroupID, title, author, text);
         writeByte(conn, Protocol::ANS_ACK);
     } else {
@@ -240,8 +240,8 @@ void delete_article(const shared_ptr <Connection> &conn, DatabaseInterface *data
     //Send answer
     writeByte(conn, Protocol::ANS_DELETE_ART);
     //Delete article in database with newsgroupID, articleID
-    if (database->exists(newsgroupID)) {
-        if (database->get_newsgroup(newsgroupID).article_exists(articleID)) {
+    if (database->newsgroup_exists(newsgroupID)) {
+        if (database->article_exists(newsgroupID, articleID)) {
             database->delete_article(newsgroupID, articleID);
             writeByte(conn, Protocol::ANS_ACK);
         } else {
@@ -273,8 +273,8 @@ void get_article(const shared_ptr <Connection> &conn, DatabaseInterface *databas
     //Send answer
     writeByte(conn, Protocol::ANS_GET_ART);
     //Create article in database with newsgroupID, title, author, text
-    if (database->exists(newsgroupID)) {
-        if (database->get_newsgroup(newsgroupID).article_exists(articleID)) {
+    if (database->newsgroup_exists(newsgroupID)) {
+        if (database->article_exists(newsgroupID, articleID)) {
             Article &article = database->load_article(newsgroupID, articleID);
             writeByte(conn, Protocol::ANS_ACK);
             writeByte(conn, Protocol::PAR_STRING);
@@ -382,7 +382,6 @@ int main(int argc, char *argv[]) {
         database = new DiskDatabase();
     }
 
-    cout << "AAAAAAAAA" << endl;
     cout << "Server running... waiting for connection" << endl;
 
 
