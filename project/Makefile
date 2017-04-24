@@ -43,11 +43,11 @@ vpath %$(SRC_EXTENSION) $(dir_lib) \
 CXX = g++
 
 DEBUG_FLAGS := -g
-INCUDE_FLAGS := -lsqlite3 -I$(dir_includes)
+INCLUDE_FLAGS := -lsqlite3 -I$(dir_includes)
 
-CXXFLAGS := -Wall -Wextra -pedantic-errors -Wold-style-cast -std=c++11
+CXXFLAGS = $(INCLUDE_FLAGS)
+CXXFLAGS += -Wall -Wextra -pedantic-errors -Wold-style-cast -std=c++11
 CXXFLAGS += $(DEBUG_FLAGS)
-CXXFLAGS += $(INCUDE_FLAGS)
 
 
 # Find and save path to all source files.
