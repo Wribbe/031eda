@@ -3,9 +3,10 @@
 
 #define UNUSED(x) (void)x
 
-#include "databaseinterface.h"
 #include <map>
 #include <sqlite3.h>
+
+#include "databaseinterface.h"
 
 class DiskDatabase : public DatabaseInterface {
 public:

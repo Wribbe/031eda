@@ -1,6 +1,7 @@
-#include "diskdatabase.h"
 #include <exception>
 #include <string.h>
+
+#include "diskdatabase.h"
 #include "article.h"
 #include "newsgroup.h"
 
@@ -222,7 +223,7 @@ std::vector <NewsGroup> DiskDatabase::get_newsgroups() {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
-    return *ngs;
+   return *ngs;
 }
 
 

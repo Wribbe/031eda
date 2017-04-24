@@ -1,7 +1,7 @@
 /* myclient.cc: sample client program */
 #include "connection.h"
 #include "connectionclosedexception.h"
-#include "../includes/protocol.h"
+#include "protocol.h"
 
 #include <iostream>
 #include <string>
